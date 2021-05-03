@@ -1,4 +1,4 @@
-package com.example.colorblindhelper.ui.livechange
+package com.example.colorblindhelper.ui.Tabs
 
 import android.Manifest
 import androidx.lifecycle.ViewModelProvider

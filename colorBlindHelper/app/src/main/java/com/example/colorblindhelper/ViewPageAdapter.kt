@@ -1,14 +1,11 @@
 package com.example.colorblindhelper
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.colorblindhelper.ui.livechange.LiveChangeFragment
-import com.example.colorblindhelper.ui.livechange.settings
-import com.example.colorblindhelper.ui.livechange.uploadImageFragment
+import com.example.colorblindhelper.ui.Tabs.LiveChangeFragment
+import com.example.colorblindhelper.ui.Tabs.settings
+import com.example.colorblindhelper.ui.Tabs.uploadImageFragment
 
 class ViewPageAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAdapter(fm, behavior) {
 

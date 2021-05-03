@@ -1,9 +1,8 @@
-package com.example.colorblindhelper.ui.livechange
+package com.example.colorblindhelper.ui.Tabs
 
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater

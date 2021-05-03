@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".ui.livechange.uploadImageFragment">
+    tools:context=".ui.Tabs.uploadImageFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
