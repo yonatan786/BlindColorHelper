@@ -43,18 +43,18 @@
         android:gravity="center"
         android:layout_marginTop="25dp"
         android:orientation="horizontal">
-        <Button
-            android:id="@+id/btnStop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="start!" />
-        <Button
-            android:visibility="gone"
-            android:layout_marginLeft="20dp"
-            android:id="@+id/btnUploadPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="upload picture" />
+    <Button
+        android:visibility="gone"
+        android:id="@+id/btnStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start!" />
+    <Button
+        android:layout_marginLeft="20dp"
+        android:id="@+id/btnUploadPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="upload picture" />
     </LinearLayout>>
 
 

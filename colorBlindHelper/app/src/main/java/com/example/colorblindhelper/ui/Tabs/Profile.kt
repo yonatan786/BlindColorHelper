@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.colorblindhelper.R
+import com.example.colorblindhelper.TestActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,18 +28,26 @@ class settings : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val account = GoogleSignIn.getLastSignedInAccount(activity)
+        val ImgViewProfile= view?.findViewById<ImageView>(R.id.ImgViewProfile)
+        val tvUserMessage = view?.findViewById<TextView>(R.id.tvUserMessage)
+        if (account != null) {
+            ImgViewProfile?.setImageURI(account.photoUrl)
+            tvUserMessage?.text = "Hello " + account.email.dropLastWhile { it != '@' }.dropLast(1)
+        }
+
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     companion object {

@@ -21,10 +21,11 @@ import java.io.IOException
 import java.nio.ByteBuffer
 
 
+
 class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPreview: ImageView?) {
 
     private val TAG = "colorDetector"
-
+    private var  bitmap:Bitmap? = null
     private val FPS: Number = 20
 
     private var cameraSource: CameraSource? = null
@@ -62,6 +63,12 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
         cameraSource!!.stop()
     }
 
+    fun saveImageToStorage() {
+        saveImgInStoarge(bitmap!!,activity!!)
+    }
+    fun uploadImageToFirebase() {
+        uploadPictureToFirebaseStorage(activity!!,bitmap,null)
+    }
     inner class CustomDetector : Detector<Point>() {
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -80,8 +87,8 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
             ) // Where 100 is the quality of the generated jpeg
 
             val jpegArray = baos.toByteArray()
-            val bitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.size)
-            activity?.runOnUiThread(Runnable{getEditedImg(bitmap,w,h, cameraPreview!!, editCameraPreview!!)})
+             bitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.size)
+            activity?.runOnUiThread(Runnable{getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!)})
 
             return null
 

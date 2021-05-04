@@ -1,7 +1,12 @@
 package com.example.colorblindhelper.ui.Tabs
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,9 +15,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import com.example.colorblindhelper.R
-import com.example.colorblindhelper.getEditedImg
+import com.example.colorblindhelper.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,10 +32,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [uploadImageFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-var imageUri: Uri? = null
-var uploadView:ImageView? = null
-var editCameraView:ImageView? = null
-class uploadImageFragment : Fragment() {
+private var imageUri: Uri? = null
+private var imgViewUpload:ImageView? = null
+private var imgViewEditCamera:ImageView? = null
+private var btnUploadPicture :Button? = null
+private var btnSavePicture :Button? = null
+private var tvSelectPicture : TextView? = null
+private var isSave = true
+private var bitmap: Bitmap? = null
+class uploadImageFragment : Fragment(), View.OnClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -70,36 +82,86 @@ class uploadImageFragment : Fragment() {
     }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        uploadView = view?.findViewById<ImageView>(R.id.cameraView)
-        editCameraView = view?.findViewById<ImageView>(R.id.editCameraView)
-        val btnUploadPicture = view?.findViewById<Button>(R.id.btnUploadPicture)
-        btnUploadPicture?.setOnClickListener(){
+        imgViewUpload = view?.findViewById<ImageView>(R.id.cameraView)
+        imgViewEditCamera = view?.findViewById<ImageView>(R.id.editCameraView)
+        btnUploadPicture = view?.findViewById<Button>(R.id.btnUploadPicture)
+        tvSelectPicture = view?.findViewById<TextView>(R.id.tvSelectPicture)
+        btnSavePicture = view?.findViewById<Button>(R.id.btnSavePicture)
+        btnUploadPicture?.setOnClickListener(this)
+        tvSelectPicture?.setOnClickListener(this)
+        imgViewUpload?.setOnClickListener(this)
+        btnSavePicture?.setOnClickListener(this)
+    }
+    private fun addPicture()
+    {
+        if(!isSave) {
+            var isSure : Boolean = true
+            val alert = AlertDialog.Builder(context)
+                .setTitle("Delete image")
+                .setMessage("Are you sure you want to change the previous image without save it") // Specifying a listener allows you to take an action before dismissing the dialog.
+                .setNegativeButton(android.R.string.yes,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        val photoPickerIntent = Intent(Intent.ACTION_PICK)
+                        photoPickerIntent.type = "image/*"
+                        startActivityForResult(photoPickerIntent, 1)
+                    })
+                .setPositiveButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert).show()
+        }
+        else
+        {
+            isSave = false
             val photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
             startActivityForResult(photoPickerIntent, 1)
         }
-        uploadView?.setOnClickListener(){
-            val photoPickerIntent = Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type = "image/*"
-            startActivityForResult(photoPickerIntent, 1)
-        }
+
     }
     override  fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1)
             if (resultCode == Activity.RESULT_OK) {
                 imageUri = data?.data
-                uploadView?.setImageURI(imageUri)
+                imgViewUpload?.setImageURI(imageUri)
                 viewEditedImg()
 
             }
     }
-    fun viewEditedImg(){
-        val bitmap = MediaStore.Images.Media.getBitmap(context?.getContentResolver(), imageUri)
-        editCameraView?.visibility = View.VISIBLE
-        getEditedImg(bitmap,bitmap.width,bitmap.height,null, editCameraView!!)
+    private fun viewEditedImg(){
+        bitmap = MediaStore.Images.Media.getBitmap(context?.getContentResolver(), imageUri)
+        imgViewEditCamera?.visibility = View.VISIBLE
+        if(bitmap != null)
+            getEditedImg(bitmap!!, bitmap!!.width, bitmap!!.height, null, imgViewEditCamera!!)
 
     }
+
+    override fun onClick(v: View?) {
+        if(v == tvSelectPicture || v == imgViewUpload)
+            addPicture()
+        else if (v == btnSavePicture) {
+            ActivityCompat.requestPermissions(
+                activity!!,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                1
+            )
+            if (checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(
+                    context!!,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED) {
+                bitmap?.let { saveImgInStoarge(it, activity!!) }
+            }
+        }
+        else if(v == btnUploadPicture)
+        {
+            uploadPictureToFirebaseStorage(context!!, bitmap, null)
+            val intent = Intent(context, ViewMyProfile::class.java)
+            startActivity(intent)
+        }
+    }
+
 
 }
 

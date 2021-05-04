@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         val tabs = findViewById<TabLayout>(R.id.tabs)
         tabs.setupWithViewPager(viewPager)
         tabs.getTabAt(1)?.setIcon(R.drawable.ic_baseline_add_a_photo_24)
-        tabs.getTabAt(2)?.setIcon(R.drawable.ic_baseline_settings_24)
+        tabs.getTabAt(2)?.setIcon(R.drawable.ic_action_name)
         tabs.getTabAt(0)?.setIcon(R.drawable.ic_baseline_find_replace_24)
 
 
