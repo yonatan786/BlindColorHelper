@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ViewImage">
+<ImageView
+    android:id="@+id/imgViewPost"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:scaleType="centerCrop"
+    />
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/dialogLayer">
+
+    <Button
+        android:id="@+id/btnFull"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="20dp"
+
+        android:textColor="@color/white"
+        android:text="watch full size"
+        android:background="@color/black"
+        />
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="20dp"
+        android:textColor="@color/white"
+        android:text="close"
+        android:background="@color/teal_200"
+        />
+</LinearLayout>
+</LinearLayout>

@@ -32,7 +32,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [uploadImageFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-private var imageUri: Uri? = null
+public var imageUri: Uri? = null
 private var imgViewUpload:ImageView? = null
 private var imgViewEditCamera:ImageView? = null
 private var btnUploadPicture :Button? = null
@@ -140,24 +140,25 @@ class uploadImageFragment : Fragment(), View.OnClickListener {
             addPicture()
         else if (v == btnSavePicture) {
             ActivityCompat.requestPermissions(
-                activity!!,
+                requireActivity(),
                 arrayOf(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ),
                 1
             )
-            if (checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(
-                    context!!,
+            if (checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(
+                    requireContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED) {
-                bitmap?.let { saveImgInStoarge(it, activity!!) }
+                bitmap?.let { saveImgInStoarge(it, requireActivity()) }
             }
         }
         else if(v == btnUploadPicture)
         {
-            uploadPictureToFirebaseStorage(context!!, bitmap, null)
-            val intent = Intent(context, ViewMyProfile::class.java)
+            uploadPictureToFirebaseStorage(requireContext(), bitmap, null,uploadType.POST)
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("tab",2)
             startActivity(intent)
         }
     }

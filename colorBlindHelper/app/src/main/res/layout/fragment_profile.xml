@@ -3,96 +3,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="15dp"
+    android:orientation="vertical"
+    android:layout_marginTop="15dp">
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal">
 
-    tools:context=".ui.Tabs.settings">
-
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/view2"
-        android:layout_width="173dp"
-        android:layout_height="150dp"
-        android:background="#ffffff"
-        android:layout_gravity="center"
-        android:shape="ring"
-        app:cardCornerRadius="10dp">
-
-        <ImageView
-            android:id="@+id/ImgViewProfile"
+        <LinearLayout
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:orientation="horizontal">
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+        <androidx.cardview.widget.CardView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:elevation="12dp"
+            android:id="@+id/view2"
+            android:innerRadius="5dp"
+            android:shape="ring"
+            android:requiresFadingEdge="vertical"
+            app:cardCornerRadius="100dp"
+            android:thicknessRatio="1.9">
+            <ImageView
+                android:layout_height="150dp"
+                android:layout_width="match_parent"
+                android:src="@drawable/ic_baseline_person_dark"
+                android:id="@+id/ImgViewProfile"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+            </ImageView>
+
+        </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_marginTop="15dp"
+                android:id="@+id/tvChangeProfilePhoto"
+                android:text="Change profile photo"
+                android:textStyle="bold"
+                android:textSize="14dp"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:gravity="left|bottom"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tvUserName"
+            android:text="yonatan"
+            android:textStyle="bold"
+            android:textSize="30dp"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_action_name" />
+            android:layout_width="match_parent"
+            android:gravity="center"/>
+    </LinearLayout>
+    </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
-    <TextView
-        android:id="@+id/btnChangeProfileImg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textStyle="bold|italic"
-        android:textSize="18dp"
-        android:text="change profile picture" />
-    <TextView
-        android:layout_marginTop="50dp"
-        android:id="@+id/tvUserMessage"
-        android:textColor="@color/black"
-        android:textStyle="bold|italic"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="35dp"
-        android:text="Hello" />
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
+    <GridView
+        android:background="@color/black"
         android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
-        <TextView
-            android:text="Update your Looking view:  "
-            android:textSize="20dp"
-            android:textStyle="bold|italic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btnNewTest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:text="Make a new test" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:text="Update your Details:  "
-            android:textStyle="bold|italic"
-            android:textSize="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btnUpdate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:text="go to update page" />
-    </LinearLayout>
-    <Button
-        android:layout_marginTop="20dp"
-        android:id="@+id/btnGoToProfile"
+        android:id="@+id/gradeView"
+        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="go to update page" />
+        android:columnWidth="100dp"
+        android:numColumns="auto_fit"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp" />
 </LinearLayout>

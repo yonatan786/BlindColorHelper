@@ -66,8 +66,8 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
     fun saveImageToStorage() {
         saveImgInStoarge(bitmap!!,activity!!)
     }
-    fun uploadImageToFirebase() {
-        uploadPictureToFirebaseStorage(activity!!,bitmap,null)
+    fun uploadImageToFirebase(type: uploadType) {
+        uploadPictureToFirebaseStorage(activity!!,bitmap,null,type)
     }
     inner class CustomDetector : Detector<Point>() {
 

@@ -15,7 +15,8 @@ import com.example.colorblindhelper.R
 import com.example.colorblindhelper.colorDetector
 
 import androidx.lifecycle.ViewModel
-import com.example.colorblindhelper.ViewMyProfile
+import com.example.colorblindhelper.ViewImage
+import com.example.colorblindhelper.uploadType
 
 var x : colorDetector? = null
 class LiveChangeViewModel : ViewModel() {
@@ -55,8 +56,8 @@ class LiveChangeFragment : Fragment() {
             editCameraView
         )
         btnUploadPicture?.setOnClickListener{
-            x!!.uploadImageToFirebase()
-            val intent = Intent(context, ViewMyProfile::class.java)
+            x!!.uploadImageToFirebase(uploadType.POST)
+            val intent = Intent(context, ViewImage::class.java)
             startActivity(intent)
         }
         btnSavePicture?.setOnClickListener{

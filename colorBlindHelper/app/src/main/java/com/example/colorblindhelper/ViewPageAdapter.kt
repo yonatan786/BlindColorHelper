@@ -4,7 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.example.colorblindhelper.ui.Tabs.LiveChangeFragment
-import com.example.colorblindhelper.ui.Tabs.settings
+import com.example.colorblindhelper.ui.Tabs.searchUser
+import com.example.colorblindhelper.ui.Tabs.Profile
 import com.example.colorblindhelper.ui.Tabs.uploadImageFragment
 
 class ViewPageAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAdapter(fm, behavior) {
@@ -20,8 +21,9 @@ class ViewPageAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAd
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> LiveChangeFragment()
-            1 -> uploadImageFragment()
-            2 -> settings()
+            3 -> uploadImageFragment()
+            2 -> Profile()
+            1 -> searchUser()
             else -> LiveChangeFragment()
         }
     }

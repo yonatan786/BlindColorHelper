@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="back"
+        android:icon="@drawable/ic_baseline_arrow_back_24"
+        android:id="@+id/itemGoBack"
+        android:visible="false"
+        app:showAsAction="ifRoom"/>
+    <item android:title="settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:id="@+id/itemSettings"
+        app:showAsAction="ifRoom">
+        <item android:title="update details"
+            android:id="@+id/itemDetails"
+            />
+        <item android:title="make a new test"
+            android:id="@+id/itemNewTest"
+            />
+    </item>
+    <item android:title="log out"
+        android:icon="@drawable/ic_baseline_exit_to_app_24"
+        android:id="@+id/itemLog_out"
+        app:showAsAction="ifRoom"/>
+
+</menu>
