@@ -2,6 +2,7 @@ package com.example.colorblindhelper
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -74,6 +75,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             startActivityForResult(intent, RC_REGISTER)
         } catch (e: ApiException) {
             Toast.makeText(applicationContext,"the connection failed",Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,"signInResult:failed code=" + e.getStatusCode(),Toast.LENGTH_SHORT).show()
         }
     }
 
