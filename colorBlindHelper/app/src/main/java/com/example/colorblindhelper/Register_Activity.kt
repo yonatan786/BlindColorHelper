@@ -58,11 +58,11 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish()
+            }
+        val intent = Intent(this, TestActivity::class.java)
+        startActivityForResult(intent, RC_TEST)
 
-                val intent = Intent(this, TestActivity::class.java)
-                startActivityForResult(intent, RC_TEST)
 
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
