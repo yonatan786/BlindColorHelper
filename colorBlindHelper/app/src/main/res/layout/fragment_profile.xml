@@ -21,8 +21,8 @@
             android:gravity="center"
             android:orientation="vertical">
         <androidx.cardview.widget.CardView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:elevation="12dp"
             android:id="@+id/view2"
             android:innerRadius="5dp"
@@ -31,7 +31,7 @@
             app:cardCornerRadius="100dp"
             android:thicknessRatio="1.9">
             <ImageView
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:layout_width="match_parent"
                 android:src="@drawable/ic_baseline_person_dark"
                 android:id="@+id/ImgViewProfile"

@@ -1,17 +1,22 @@
 package com.example.colorblindhelper
 
 
+import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
 import android.util.Log
-import android.widget.GridView
-import android.widget.ImageView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -25,25 +30,19 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 enum class Gender {
     MALE,FEMALE
 }
-fun uploadDataToFirebase(context: Context,isGlasses :Boolean,gender: Gender,birthDate: Calendar) {
+
+fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, birthDate: String) {
 
     val db = Firebase.firestore
     val userName = getUserName(context) ?: return
-    val user = hashMapOf(
-        "userName" to userName,
-        "isGlasses" to isGlasses,
-        "gender" to gender,
-        "birthDate" to birthDate
-    )
-    db.collection("users")
-        .add(user)
+    val user = userModel(userName,isGlasses,gender,birthDate)
+    db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
             Toast.makeText(context,"The details saved",Toast.LENGTH_SHORT).show()
         }
@@ -51,7 +50,45 @@ fun uploadDataToFirebase(context: Context,isGlasses :Boolean,gender: Gender,birt
             Toast.makeText(context,"Failed to upload the details",Toast.LENGTH_SHORT).show()
         }
 }
+public fun showDialog(pos: Int, item: String?,context:Context,activity: Activity,userName: String)
+{
+    val storageRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/"+ userName)
 
+    val dialog : Dialog = Dialog(context)
+    dialog.setContentView(R.layout.activity_view_image)
+    if (item != null) {
+        viewImg(dialog.context,storageRef,item,dialog.findViewById<ImageView>(R.id.imgViewPost))
+    }
+    dialog.findViewById<EditText>(R.id.etComment).visibility = View.GONE
+    dialog.findViewById<TextView>(R.id.tvSend).visibility = View.GONE
+    dialog.findViewById<Button>(R.id.btnClose).setOnClickListener(View.OnClickListener{
+        dialog.dismiss()
+    })
+    dialog.findViewById<Button>(R.id.btnFull).setOnClickListener(View.OnClickListener{
+        val intent = Intent(context, ViewImage::class.java)
+        intent.putExtra("username", userName)
+        intent.putExtra("fileName", item)
+        activity.startActivityForResult(intent,100)
+    })
+    dialog.show()
+}
+fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
+    ActivityCompat.requestPermissions(
+        activity,
+        arrayOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ),
+        1
+    )
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED) {
+        return true
+    }
+    return false
+}
 private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 {
     val result = Bitmap.createBitmap(w, h, bitmap.config)
@@ -142,10 +179,7 @@ public fun getfileNameList(userName: String, gridView: GridView?,context:Context
             it.items.forEach{
                 fileNameList.add(it.name)
             }
-            val userName = getUserName(context)
-            if(userName != null) {
-                gridView?.adapter = ImageAdapter(activity, fileNameList,userName)
-            }
+            gridView?.adapter = ImageAdapter(activity, fileNameList,userName)
         }
 
 }

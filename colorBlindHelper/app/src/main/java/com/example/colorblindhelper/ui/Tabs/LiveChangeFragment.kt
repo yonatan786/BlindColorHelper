@@ -11,12 +11,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
-import com.example.colorblindhelper.R
-import com.example.colorblindhelper.colorDetector
 
 import androidx.lifecycle.ViewModel
-import com.example.colorblindhelper.ViewImage
-import com.example.colorblindhelper.uploadType
+import com.example.colorblindhelper.*
 
 var x : colorDetector? = null
 class LiveChangeViewModel : ViewModel() {
@@ -43,7 +40,7 @@ class LiveChangeFragment : Fragment() {
         val uploadView = view?.findViewById<ImageView>(R.id.cameraView)
         val editCameraView = view?.findViewById<ImageView>(R.id.editCameraView)
         ActivityCompat.requestPermissions(
-            activity!!,
+            requireActivity(),
             arrayOf(Manifest.permission.CAMERA),
             1)
         val btnStop = view?.findViewById<Button>(R.id.btnStop)
@@ -51,13 +48,13 @@ class LiveChangeFragment : Fragment() {
         val btnUploadPicture = view?.findViewById<Button>(R.id.btnUploadPicture)
 
         var isStop = true
-        x = colorDetector(activity!!,
+        x = colorDetector(requireActivity(),
             uploadView,
             editCameraView
         )
         btnUploadPicture?.setOnClickListener{
             x!!.uploadImageToFirebase(uploadType.POST)
-            val intent = Intent(context, ViewImage::class.java)
+            val intent = Intent(context, MainActivity::class.java)
             startActivity(intent)
         }
         btnSavePicture?.setOnClickListener{
@@ -74,7 +71,7 @@ class LiveChangeFragment : Fragment() {
                 btnStop.text = "stop"
                 btnSavePicture?.visibility = View.INVISIBLE
                 btnUploadPicture?.visibility = View.GONE
-                x!!.start(activity!!)
+                x!!.start(requireActivity())
             }
             isStop = !isStop
         }

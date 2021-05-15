@@ -51,7 +51,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val gender = getGender(radioGender!!.checkedRadioButtonId, R.id.radioMale, R.id.radioFemale)
         if(isGlasses == null || gender == null)
             return
-        val birthDate = getDate(datePicker!!)
+        val birthDate = getDate(datePicker!!).toString()
             uploadDataToFirebase(applicationContext,isGlasses,gender,birthDate)
 
             if(requestIntentFlag!! == RequestType.UPDATE) {

@@ -1,21 +1,14 @@
 package com.example.colorblindhelper.ui.Tabs
 
-import android.Manifest
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.colorblindhelper.*
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,18 +40,7 @@ class Profile : Fragment(), AdapterView.OnItemClickListener {
         ImgViewProfile = view?.findViewById<ImageView>(R.id.ImgViewProfile)
         downloadImgViewProfile(requireContext(), getUserName(requireContext())!!,ImgViewProfile!!)
         view?.findViewById<TextView>(R.id.tvChangeProfilePhoto)?.setOnClickListener{
-            ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    ),
-                    1
-            )
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                            requireContext(),
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) == PackageManager.PERMISSION_GRANTED) {
+            if(checkReadWritePermissions(requireActivity(),requireContext())){
                 val photoPickerIntent = Intent(Intent.ACTION_PICK)
                 photoPickerIntent.type = "image/*"
                 startActivityForResult(photoPickerIntent, 1)
@@ -105,27 +87,10 @@ class Profile : Fragment(), AdapterView.OnItemClickListener {
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val item = parent?.getItemAtPosition(position)
-        showDialog(position, item as String?)
+        showDialog(position, item as String?,requireContext(),requireActivity(),
+            getUserName(requireContext())!!
+        )
     }
-    public fun showDialog(pos: Int, item: String?)
-    {
-        val storageRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/"+ getUserName(requireContext()))
 
-        val dialog : Dialog = Dialog(requireContext())
-        dialog.setContentView(R.layout.activity_view_image)
-        if (item != null) {
-            viewImg(dialog.context,storageRef,item,dialog.findViewById<ImageView>(R.id.imgViewPost))
-        }
-        dialog.findViewById<Button>(R.id.btnClose).setOnClickListener(View.OnClickListener{
-            dialog.dismiss()
-        })
-        dialog.findViewById<Button>(R.id.btnFull).setOnClickListener(View.OnClickListener{
-            val intent = Intent(context, ViewImage::class.java)
-            intent.putExtra("username", getUserName(requireContext()))
-            intent.putExtra("fileName", item)
-            startActivityForResult(intent,100)
-        })
-        dialog.show()
-    }
 
 }
