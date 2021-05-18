@@ -34,7 +34,7 @@
         android:layout_marginTop="13dp"
         android:layout_marginBottom="12dp"
         android:tag="plate1"
-        android:src="@drawable/plate1" />
+        android:src="@drawable/r1" />
 
     <EditText
         android:id="@+id/answer"

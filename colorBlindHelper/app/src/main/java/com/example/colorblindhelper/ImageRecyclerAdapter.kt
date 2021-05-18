@@ -8,7 +8,7 @@ import android.widget.ImageView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
-public class ImageAdapter(
+public class ImageRecyclerAdapter(
     private val context: Context,
     private val fileNameList: ArrayList<String> = ArrayList<String>(),
     userName: String?

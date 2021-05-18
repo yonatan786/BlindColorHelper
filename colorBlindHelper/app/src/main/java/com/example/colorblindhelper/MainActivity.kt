@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
+        menu?.findItem(R.id.itemFriends)?.isVisible   = true
         return true
     }
 
@@ -53,6 +54,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.itemNewTest -> {
                 val intent = Intent(this, TestActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.itemFriends -> {
+                val intent = Intent(this, RequestActivity::class.java)
                 startActivity(intent)
             }
         }

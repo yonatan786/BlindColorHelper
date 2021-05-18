@@ -1,9 +1,13 @@
 package com.example.colorblindhelper
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,7 +17,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 var signInButton : SignInButton? = null
@@ -40,9 +45,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)
         if(account != null /*adding check */ ) {
-//            saveUserID(this, account.id)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            getUserName(this)?.let { automaticLogIn(it,this) }
         }
 
     }
@@ -71,9 +74,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            val intent = Intent(this, Register_Activity::class.java)
-            intent.putExtra("requestCode",0)
-            startActivityForResult(intent, RC_REGISTER)
+            getUserName(applicationContext)?.let { automaticLogIn(it, this, true) }
         } catch (e: ApiException) {
             Toast.makeText(applicationContext,"the connection failed",Toast.LENGTH_SHORT).show()
             Toast.makeText(applicationContext,"signInResult:failed code=" + e.getStatusCode(),Toast.LENGTH_SHORT).show()
@@ -81,20 +82,44 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
+    private fun automaticLogIn(userName: String, activity: Activity, isChecking:Boolean=false) {
+        val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName).addSnapshotListener{ snapshot, e ->
+            if (!snapshot?.isEmpty!!){
 
-
-/*    private fun saveUserID(context: Context, account : String?)
+                if(snapshot.documents[0].get("blindType") == "UNCLASSIFIED") {
+                    showNotExistTestResultDialog(activity)
+                }
+                else{
+                    val intent = Intent(activity,MainActivity::class.java)
+                    activity.startActivity(intent)
+                }
+            }
+            else if(isChecking)
+            {
+                val intent = Intent(this, Register_Activity::class.java)
+                intent.putExtra("requestCode",0)
+                startActivityForResult(intent, RC_REGISTER)
+            }
+        };
+    }
+    private fun showNotExistTestResultDialog(activity: Activity)
     {
-        val pref = applicationContext.getSharedPreferences("userID", 0) // 0 - for private mode
-        val editor = pref.edit()
-        editor.putString("userID",account)
-        editor.apply();
-    }*/
-}
-
-class settingsActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        val dialog : Dialog = Dialog(this)
+        dialog.setContentView(R.layout.result)
+        dialog.findViewById<TextView>(R.id.resText).text = "you didn't finish the blind test"
+        dialog.findViewById<TextView>(R.id.result).text = "Finishing blind test"
+        dialog.findViewById<Button>(R.id.btnPopup).text = "Go now"
+        dialog.findViewById<Button>(R.id.btnSkip).visibility=View.VISIBLE
+        dialog.findViewById<Button>(R.id.btnPopup).setOnClickListener(View.OnClickListener{
+            dialog.dismiss()
+            val intent = Intent(activity,TestActivity::class.java)
+            activity.startActivity(intent)
+        })
+        dialog.findViewById<Button>(R.id.btnSkip).setOnClickListener(View.OnClickListener {
+            val intent = Intent(activity,MainActivity::class.java)
+            activity.startActivity(intent)
+        })
+        dialog.show()
     }
 }
+

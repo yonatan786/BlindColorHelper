@@ -1,7 +1,5 @@
 package com.example.colorblindhelper
 
-package com.example.test
-
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
@@ -12,13 +10,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.graphics.drawable.toBitmap
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class QuestionTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test)
+        setContentView(R.layout.activity_question_test)
 
         val btnPrev = findViewById<Button>(R.id.btnPrev)
         val btnNext = findViewById<Button>(R.id.btnNext)
@@ -35,7 +33,7 @@ class QuestionTestActivity : AppCompatActivity() {
 
         // btnPrev.visibility = View.INVISIBLE
         answer.visibility = View.INVISIBLE
-        image.setImageResource(R.drawable.plate1)
+        image.setImageResource(R.drawable.r1)
         image.setTag("plate1")
 
         // what happens when we click on 'Previous' button:
@@ -48,61 +46,61 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate2" -> {
                     image.setTag("plate1")
-                    image.setImageResource(R.drawable.plate1)
+                    image.setImageResource(R.drawable.r1)
                     text.text = "Example: This number is 12. Click 'Next' to continue."
                     answer.visibility = View.INVISIBLE
                 }
                 "plate3" -> {
                     image.setTag("plate2")
-                    image.setImageResource(R.drawable.plate2)
+                    image.setImageResource(R.drawable.r2)
                 }
                 "plate4" -> {
                     image.setTag("plate3")
-                    image.setImageResource(R.drawable.plate3)
+                    image.setImageResource(R.drawable.r3)
                 }
                 "plate5" -> {
                     image.setTag("plate4")
-                    image.setImageResource(R.drawable.plate4)
+                    image.setImageResource(R.drawable.r4)
                 }
                 "plate6" -> {
                     image.setTag("plate5")
-                    image.setImageResource(R.drawable.plate5)
+                    image.setImageResource(R.drawable.r5)
                 }
                 "plate7" -> {
                     image.setTag("plate6")
-                    image.setImageResource(R.drawable.plate6)
+                    image.setImageResource(R.drawable.r6)
                 }
                 "plate8" -> {
                     image.setTag("plate7")
-                    image.setImageResource(R.drawable.plate7)
+                    image.setImageResource(R.drawable.r7)
                 }
                 "plate9" -> {
                     image.setTag("plate8")
-                    image.setImageResource(R.drawable.plate8)
+                    image.setImageResource(R.drawable.r8)
                 }
                 "plate10" -> {
                     image.setTag("plate9")
-                    image.setImageResource(R.drawable.plate9)
+                    image.setImageResource(R.drawable.r9)
                 }
                 "plate11" -> {
                     image.setTag("plate10")
-                    image.setImageResource(R.drawable.plate10)
+                    image.setImageResource(R.drawable.a1)
                 }
                 "plate12" -> {
                     image.setTag("plate11")
-                    image.setImageResource(R.drawable.plate11)
+                    image.setImageResource(R.drawable.a2)
                 }
                 "plate13" -> {
                     image.setTag("plate12")
-                    image.setImageResource(R.drawable.plate12)
+                    image.setImageResource(R.drawable.a3)
                 }
                 "plate14" -> {
                     image.setTag("plate13")
-                    image.setImageResource(R.drawable.plate13)
+                    image.setImageResource(R.drawable.a4)
                 }
                 "plate15" -> {
                     image.setTag("plate14")
-                    image.setImageResource(R.drawable.plate14)
+                    image.setImageResource(R.drawable.a5)
                     btnNext.text = "NEXT"
                 }
             }
@@ -113,13 +111,13 @@ class QuestionTestActivity : AppCompatActivity() {
             when (image.tag) {
                 "plate1" -> {
                     image.setTag("plate2")
-                    image.setImageResource(R.drawable.plate2)
+                    image.setImageResource(R.drawable.r2)
                     text.text = "What is the number on the plate?"
                     answer.visibility = View.VISIBLE
                 }
                 "plate2" -> {
                     image.setTag("plate3")
-                    image.setImageResource(R.drawable.plate3)
+                    image.setImageResource(R.drawable.r3)
 
                     // set answer:
                     if (!answer.text.isEmpty()) {
@@ -131,7 +129,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate3" -> {
                     image.setTag("plate4")
-                    image.setImageResource(R.drawable.plate4)
+                    image.setImageResource(R.drawable.r4)
 
                     if (!answer.text.isEmpty()) {
                         answers[1] = Integer.parseInt(answer.text.toString())
@@ -142,7 +140,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate4" -> {
                     image.setTag("plate5")
-                    image.setImageResource(R.drawable.plate5)
+                    image.setImageResource(R.drawable.r5)
 
                     if (!answer.text.isEmpty()) {
                         answers[2] = Integer.parseInt(answer.text.toString())
@@ -153,7 +151,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate5" -> {
                     image.setTag("plate6")
-                    image.setImageResource(R.drawable.plate6)
+                    image.setImageResource(R.drawable.r6)
 
                     if (!answer.text.isEmpty()) {
                         answers[3] = Integer.parseInt(answer.text.toString())
@@ -164,7 +162,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate6" -> {
                     image.setTag("plate7")
-                    image.setImageResource(R.drawable.plate7)
+                    image.setImageResource(R.drawable.r7)
 
                     if (!answer.text.isEmpty()) {
                         answers[4] = Integer.parseInt(answer.text.toString())
@@ -175,7 +173,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate7" -> {
                     image.setTag("plate8")
-                    image.setImageResource(R.drawable.plate8)
+                    image.setImageResource(R.drawable.r8)
 
                     if (!answer.text.isEmpty()) {
                         answers[5] = Integer.parseInt(answer.text.toString())
@@ -186,7 +184,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate8" -> {
                     image.setTag("plate9")
-                    image.setImageResource(R.drawable.plate9)
+                    image.setImageResource(R.drawable.r9)
 
                     if (!answer.text.isEmpty()) {
                         answers[6] = Integer.parseInt(answer.text.toString())
@@ -197,7 +195,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate9" -> {
                     image.setTag("plate10")
-                    image.setImageResource(R.drawable.plate10)
+                    image.setImageResource(R.drawable.a1)
 
                     if (!answer.text.isEmpty()) {
                         answers[7] = Integer.parseInt(answer.text.toString())
@@ -208,7 +206,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate10" -> {
                     image.setTag("plate11")
-                    image.setImageResource(R.drawable.plate11)
+                    image.setImageResource(R.drawable.a2)
 
                     if (!answer.text.isEmpty()) {
                         answers[8] = Integer.parseInt(answer.text.toString())
@@ -219,7 +217,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate11" -> {
                     image.setTag("plate12")
-                    image.setImageResource(R.drawable.plate12)
+                    image.setImageResource(R.drawable.a3)
 
                     if (!answer.text.isEmpty()) {
                         answers[9] = Integer.parseInt(answer.text.toString())
@@ -230,7 +228,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate12" -> {
                     image.setTag("plate13")
-                    image.setImageResource(R.drawable.plate13)
+                    image.setImageResource(R.drawable.a4)
 
                     if (!answer.text.isEmpty()) {
                         answers[10] = Integer.parseInt(answer.text.toString())
@@ -241,7 +239,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate13" -> {
                     image.setTag("plate14")
-                    image.setImageResource(R.drawable.plate14)
+                    image.setImageResource(R.drawable.a5)
 
                     if (!answer.text.isEmpty()) {
                         answers[11] = Integer.parseInt(answer.text.toString())
@@ -252,7 +250,7 @@ class QuestionTestActivity : AppCompatActivity() {
                 }
                 "plate14" -> {
                     image.setTag("plate15")
-                    image.setImageResource(R.drawable.plate15)
+                    image.setImageResource(R.drawable.a6)
                     btnNext.text = "FINISH"
 
                     if (!answer.text.isEmpty()) {
@@ -305,12 +303,30 @@ class QuestionTestActivity : AppCompatActivity() {
                         classification = "Monochromacy"
 
                     // show result dialog:
+                    updateClassificationOnFirebase(classification)
                     showDialog(classification)
+
 
                 }
             }
         }
 
+    }
+
+    private fun updateClassificationOnFirebase(blindType: String) {
+        Firebase.firestore.collection("users").document(getUserName(applicationContext)!!).update("blindType",getClassification(blindType))
+    }
+
+    private fun getClassification(blindType: String): ClassifyBlindness {
+        when(blindType)
+        {
+            "Normal" -> return ClassifyBlindness.NORMAL
+            "Monochromacy" -> return ClassifyBlindness.BLACK_WHITE_BLIND
+            "Green-Blind/Deuteranopia" -> return ClassifyBlindness.GREEN_BLIND
+            "Red-Blind/Protanopia" -> return ClassifyBlindness.RED_BLIND
+            "Not classified" -> return ClassifyBlindness.UNCLASSIFIED
+        }
+        return ClassifyBlindness.UNCLASSIFIED
     }
 
     public fun showDialog(typeBlind: String)

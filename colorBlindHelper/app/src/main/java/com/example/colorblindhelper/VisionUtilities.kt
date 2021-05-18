@@ -179,7 +179,7 @@ public fun getfileNameList(userName: String, gridView: GridView?,context:Context
             it.items.forEach{
                 fileNameList.add(it.name)
             }
-            gridView?.adapter = ImageAdapter(activity, fileNameList,userName)
+            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList,userName)
         }
 
 }
@@ -228,4 +228,24 @@ private fun uploadFromBitmap(bitmap: Bitmap, storageRef:StorageReference): Uploa
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val data: ByteArray = baos.toByteArray()
     return storageRef.putBytes(data)
+}
+
+fun RejectFriendRequest(context: Context,userSentRequest : String,userGotRequest :String) {
+    //TODO("adding notification to userSend")
+    updateStatus(context,userSentRequest,userGotRequest,Status.REJECTED)
+
+}
+
+fun AcceptFriendRequest(context: Context,userSentRequest : String,userGotRequest :String) {
+    //TODO("adding notification to userSend")
+    updateStatus(context,userSentRequest,userGotRequest,Status.FRIENDS)
+}
+private fun updateStatus(context: Context,userSentRequest : String,userGotRequest :String,status: Status)
+{
+    val db = Firebase.firestore
+    val request = RequestFriendship(status,userSentRequest, userGotRequest)
+    db.collection("requests").document(userSentRequest).collection("newRequests").document(
+        userGotRequest).set(request)
+    db.collection("requests").document(userGotRequest).collection("newRequests").document(
+        userSentRequest).set(request)
 }

@@ -47,7 +47,7 @@ class searchUser : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        adapter?.startListening()
+        showFriendsList()
 
     }
 
@@ -99,9 +99,10 @@ class searchUser : Fragment() {
             }
     }
     private fun firebaseSearch(searchText: String?) {
-
-
-        val query  = FirebaseFirestore.getInstance().collection("users").orderBy("userName").startAt(searchText).endAt(searchText+"\uf8ff")
+        if (searchText == "")
+            showFriendsList()
+        val query  = FirebaseFirestore.getInstance().collection("users").whereNotEqualTo("userName",
+            getUserName(requireContext())).orderBy("userName").startAt(searchText).endAt(searchText+"\uf8ff")
         val options = FirestoreRecyclerOptions.Builder<userModel>()
             .setQuery(query,userModel::class.java)
             .setLifecycleOwner(this)
@@ -118,6 +119,39 @@ class searchUser : Fragment() {
                 holder.itemView.setOnClickListener {
                     val intent = Intent(context, viewOtherProfile::class.java)
                     intent.putExtra("userNameProfile",model.getUserName())
+                    startActivity(intent)
+                }
+            }
+        }
+        rvUsersList?.setLayoutManager(LinearLayoutManager(activity));
+        rvUsersList?.adapter = adapter
+    }
+
+
+    private fun showFriendsList() {
+        val query = FirebaseFirestore.getInstance().collection("requests/"+getUserName(requireContext())+"/newRequests")
+            .whereEqualTo("status", "FRIENDS")
+        val options = FirestoreRecyclerOptions.Builder<RequestFriendship>()
+            .setQuery(query, RequestFriendship::class.java)
+            .setLifecycleOwner(this)
+            .build()
+        val adapter = object : FirestoreRecyclerAdapter<RequestFriendship, ViewHolder>(options) {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                return ViewHolder(LayoutInflater.from(parent.context)
+                    .inflate(R.layout.search_row, parent, false))
+            }
+
+            override fun onBindViewHolder(holder: ViewHolder, position: Int, model: RequestFriendship) {
+                val userName = if (model.userSend == getUserName(requireContext())) {
+                    model.userGet
+                } else {
+                    model.userSend
+                }
+                holder.tvUserName?.text = userName
+                context?.let { downloadImgViewProfile(it,userName,holder.imgViewProfile!!) }
+                holder.itemView.setOnClickListener {
+                    val intent = Intent(context, viewOtherProfile::class.java)
+                    intent.putExtra("userNameProfile",userName)
                     startActivity(intent)
                 }
             }

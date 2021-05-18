@@ -29,10 +29,10 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         userName = intent.getStringExtra("username")
         tvSend = findViewById(R.id.tvSend)
         etComment = findViewById(R.id.etComment)
-        val storageRef: StorageReference =
-        FirebaseStorage.getInstance().reference.child("images/posts/$userName")
+        val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
         viewImg(applicationContext,storageRef, fileName!!,findViewById<ImageView>(R.id.imgViewPost))
         findViewById<LinearLayout>(R.id.dialogLayer).visibility = View.GONE
+        findViewById<LinearLayout>(R.id.layoutComment).visibility = View.VISIBLE
         rvCommentsList = findViewById<RecyclerView>(R.id.rvCommentsList)
         tvSend?.setOnClickListener(this)
         firebaseUpdate()
@@ -104,7 +104,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         fileName: String,
         context:Context
     ) {
-       FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/").add(commentModel(userName,commentText))
+       FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/").add(commentModel(userSend,commentText))
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
             }
