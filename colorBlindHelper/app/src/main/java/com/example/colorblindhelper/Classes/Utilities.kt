@@ -17,6 +17,8 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.colorblindhelper.Activities.ViewImage
+import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -41,7 +43,7 @@ fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, bi
 
     val db = Firebase.firestore
     val userName = getUserName(context) ?: return
-    val user = userModel(userName,isGlasses,gender,birthDate)
+    val user = UserModel(userName,isGlasses,gender,birthDate)
     db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
             Toast.makeText(context,"The details saved",Toast.LENGTH_SHORT).show()
@@ -218,7 +220,7 @@ public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri:
 }
 private fun uploadFromUri(uri: Uri, storageRef: StorageReference, type: uploadType): UploadTask {
     if(type == uploadType.POST) {
-        return TODO()
+        //return TODO()
     }
     return storageRef.putFile(uri)
 

@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.app.Activity
 import android.content.Intent
@@ -8,13 +8,16 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.colorblindhelper.*
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+
 
 enum class RequestType {SIGN_IN,UPDATE}
 val RC_TEST = 100
 class Register_Activity : AppCompatActivity(), View.OnClickListener {
-    val requestType = arrayOf(RequestType.SIGN_IN,RequestType.UPDATE)
-    private var requestIntentFlag :RequestType? = null
+    val requestType = arrayOf(RequestType.SIGN_IN, RequestType.UPDATE)
+    private var requestIntentFlag : RequestType? = null
     private var btnNext: Button? = null
     private var radioIsGlasses: RadioGroup? = null
     private var radioGender: RadioGroup? = null
@@ -30,11 +33,23 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         btnNext!!.setOnClickListener(this)
         val i = intent.getIntExtra("requestCode",-1)
         requestIntentFlag = requestType[i]
-        updateAllFields(datePicker,radioGender,radioIsGlasses)
+        getUserDetails()
     }
 
-    private fun updateAllFields(datePicker: DatePicker?, radioGender: RadioGroup?, radioIsGlasses: RadioGroup?) {
-//        TODO()
+    private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?) {
+        radioGender?.check( if(gender == Gender.MALE){R.id.radioMale}else{R.id.radioFemale} )
+        radioIsGlasses?.check(if(isGlasses==true){R.id.radioGlassesYes}else{R.id.radioGlassesYes})
+
+    }
+
+    private fun getUserDetails() {
+        val username = getUserName(applicationContext)
+        val rootRef = FirebaseFirestore.getInstance()
+        rootRef.collection("users").document(username!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val user = documentSnapshot.toObject(UserModel::class.java)
+                updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses())
+            }
     }
 
     override fun onClick(v: View?) {
@@ -47,7 +62,10 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
     {
         findViewById<RadioButton>(R.id.radioGlassesNo).error = null
         findViewById<RadioButton>(R.id.radioFemale).error= null
-        val isGlasses = getIsGlasses(radioIsGlasses!!.checkedRadioButtonId, R.id.radioGlassesNo, R.id.radioGlassesYes)
+        val isGlasses = getIsGlasses(radioIsGlasses!!.checkedRadioButtonId,
+            R.id.radioGlassesNo,
+            R.id.radioGlassesYes
+        )
         val gender = getGender(radioGender!!.checkedRadioButtonId, R.id.radioMale, R.id.radioFemale)
         if(isGlasses == null || gender == null)
             return
@@ -118,7 +136,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.itemGoBack -> {
-                if(requestIntentFlag!! == RequestType.SIGN_IN )
+                if(requestIntentFlag!! == RequestType.SIGN_IN)
                 {
                     Toast.makeText(applicationContext,"you didn't finish the registering",Toast.LENGTH_LONG).show()
                 }

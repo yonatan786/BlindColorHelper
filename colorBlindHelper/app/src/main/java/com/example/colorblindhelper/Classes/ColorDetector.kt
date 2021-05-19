@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Classes
 
 //import com.example.colorblind.VisionUtilities
 
@@ -13,6 +13,10 @@ import android.util.SparseArray
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import com.example.colorblindhelper.getEditedImg
+import com.example.colorblindhelper.saveImgInStoarge
+import com.example.colorblindhelper.uploadPictureToFirebaseStorage
+import com.example.colorblindhelper.uploadType
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.Frame
@@ -88,7 +92,7 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
 
             val jpegArray = baos.toByteArray()
              bitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.size)
-            activity?.runOnUiThread(Runnable{getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!)})
+            activity?.runOnUiThread(Runnable{ getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!) })
 
             return null
 

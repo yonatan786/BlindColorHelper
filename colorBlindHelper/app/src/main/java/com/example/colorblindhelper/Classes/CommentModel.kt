@@ -1,4 +1,4 @@
-package com.example.colorblindhelper;
+package com.example.colorblindhelper.Classes;
 
 class commentModel(private val userName:String, private val textComment:String){
 

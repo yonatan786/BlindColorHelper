@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Classes
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -17,7 +17,6 @@ class ViewPageAdapter(fm: FragmentManager, behavior: Int) : FragmentStatePagerAd
     override fun getCount(): Int {
         return mCountTabs;
     }
-
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> LiveChangeFragment()

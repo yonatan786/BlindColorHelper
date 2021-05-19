@@ -14,6 +14,8 @@ import androidx.core.app.ActivityCompat
 
 import androidx.lifecycle.ViewModel
 import com.example.colorblindhelper.*
+import com.example.colorblindhelper.Activities.MainActivity
+import com.example.colorblindhelper.Classes.colorDetector
 
 var x : colorDetector? = null
 class LiveChangeViewModel : ViewModel() {

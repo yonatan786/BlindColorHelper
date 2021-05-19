@@ -1,17 +1,18 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
-import ViewHolder
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.colorblindhelper.*
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class RequestActivity : AppCompatActivity() {
     var rvRequestsList : RecyclerView? = null
@@ -26,7 +27,7 @@ class RequestActivity : AppCompatActivity() {
 
 
     private fun firebaseRequestList() {
-        val query = FirebaseFirestore.getInstance().collection("requests/"+getUserName(applicationContext)+"/newRequests")
+        val query = FirebaseFirestore.getInstance().collection("requests/"+ getUserName(applicationContext) +"/newRequests")
             .whereNotEqualTo("status", "FRIENDS")
 
         val options = FirestoreRecyclerOptions.Builder<RequestFriendship>()
@@ -44,18 +45,29 @@ class RequestActivity : AppCompatActivity() {
                 holder.tvUserName?.text = model.userSend
                 downloadImgViewProfile(applicationContext,model.userSend,holder.imgViewProfile!!)
                 holder.itemView.setOnClickListener {
-                    val intent = Intent(applicationContext, viewOtherProfile::class.java)
+                    val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
                     intent.putExtra("userNameProfile", model.userSend)
                     startActivity(intent)
                 }
                 holder.btnReject?.setOnClickListener{
-                    RejectFriendRequest(applicationContext,model.userSend,getUserName(applicationContext)!!)
+                    RejectFriendRequest(applicationContext,model.userSend,
+                        getUserName(applicationContext)!!)
                 }
                 holder.btnAccept?.setOnClickListener{
-                    AcceptFriendRequest(applicationContext,model.userSend,getUserName(applicationContext)!!)
+                    AcceptFriendRequest(applicationContext,model.userSend,
+                        getUserName(applicationContext)!!)
+                }
+            }
+            override fun onDataChanged() {
+                if(itemCount == 0) {
+                    findViewById<TextView>(R.id.tvNoRequest).text = "There aren't requests..."
+                }
+                else {
+                    findViewById<TextView>(R.id.tvNoRequest).text = "requests"
                 }
             }
         }
+
         rvRequestsList?.layoutManager = LinearLayoutManager(this);
         rvRequestsList?.adapter = adapter
     }

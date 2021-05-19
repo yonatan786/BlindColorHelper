@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
 import com.example.colorblindhelper.*
+import com.example.colorblindhelper.Activities.MainActivity
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -156,7 +157,7 @@ class uploadImageFragment : Fragment(), View.OnClickListener {
         }
         else if(v == btnUploadPicture)
         {
-            uploadPictureToFirebaseStorage(requireContext(), bitmap, null,uploadType.POST)
+            imageUri?.let{uploadPictureToFirebaseStorage(requireContext(), null, imageUri,uploadType.POST)}
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra("tab",2)
             startActivity(intent)

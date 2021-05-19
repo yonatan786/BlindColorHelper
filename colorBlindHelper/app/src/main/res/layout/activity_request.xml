@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RequestActivity">
+    android:orientation="vertical"
+    tools:context=".Activities.RequestActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:visibility="visible"
+        android:id="@+id/tvNoRequest"
+        android:textSize="20dp"
+        android:text="requests"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRequestsList"
         android:layout_width="match_parent"

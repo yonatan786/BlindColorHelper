@@ -1,18 +1,18 @@
 package com.example.colorblindhelper.ui.Tabs
 
-import ViewHolder
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
-import android.widget.Toast
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.colorblindhelper.*
+import com.example.colorblindhelper.Activities.viewOtherProfileActivity
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +34,7 @@ class searchUser : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var rvUsersList : RecyclerView? = null
-    var adapter : FirestoreRecyclerAdapter<userModel, ViewHolder>? = null
+    var adapter : FirestoreRecyclerAdapter<UserModel, ViewHolder>? = null
     var mAuth : FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,21 +103,21 @@ class searchUser : Fragment() {
             showFriendsList()
         val query  = FirebaseFirestore.getInstance().collection("users").whereNotEqualTo("userName",
             getUserName(requireContext())).orderBy("userName").startAt(searchText).endAt(searchText+"\uf8ff")
-        val options = FirestoreRecyclerOptions.Builder<userModel>()
-            .setQuery(query,userModel::class.java)
+        val options = FirestoreRecyclerOptions.Builder<UserModel>()
+            .setQuery(query,UserModel::class.java)
             .setLifecycleOwner(this)
             .build()
-        adapter = object : FirestoreRecyclerAdapter<userModel, ViewHolder>(options) {
+        adapter = object : FirestoreRecyclerAdapter<UserModel, ViewHolder>(options) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
                 return ViewHolder(LayoutInflater.from(parent.context)
                     .inflate(R.layout.search_row, parent, false))
             }
 
-            override fun onBindViewHolder(holder: ViewHolder, position: Int, model: userModel) {
+            override fun onBindViewHolder(holder: ViewHolder, position: Int, model: UserModel) {
                 holder.tvUserName?.text = model.getUserName()
                 context?.let { downloadImgViewProfile(it,model.getUserName(),holder.imgViewProfile!!) }
                 holder.itemView.setOnClickListener {
-                    val intent = Intent(context, viewOtherProfile::class.java)
+                    val intent = Intent(context, viewOtherProfileActivity::class.java)
                     intent.putExtra("userNameProfile",model.getUserName())
                     startActivity(intent)
                 }
@@ -150,7 +150,7 @@ class searchUser : Fragment() {
                 holder.tvUserName?.text = userName
                 context?.let { downloadImgViewProfile(it,userName,holder.imgViewProfile!!) }
                 holder.itemView.setOnClickListener {
-                    val intent = Intent(context, viewOtherProfile::class.java)
+                    val intent = Intent(context, viewOtherProfileActivity::class.java)
                     intent.putExtra("userNameProfile",userName)
                     startActivity(intent)
                 }
@@ -160,4 +160,16 @@ class searchUser : Fragment() {
         rvUsersList?.adapter = adapter
     }
 
+}
+
+class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+
+    public var tvUserName : TextView? = null
+    public var imgViewProfile: ImageView? = null
+    init{
+        tvUserName = view.findViewById(R.id.tvUserName)
+        imgViewProfile = view.findViewById(R.id.ImgViewProfile)
+
+    }
 }

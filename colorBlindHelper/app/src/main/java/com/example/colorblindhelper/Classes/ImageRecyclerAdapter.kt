@@ -1,10 +1,11 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Classes
 
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import com.example.colorblindhelper.viewImg
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
@@ -23,6 +24,9 @@ public class ImageRecyclerAdapter(
             imgView = ImageView(context)
             //imgView.layoutParams = GridView.LayoutPa
             imgView.scaleType = ImageView.ScaleType.CENTER_CROP
+            val params = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            imgView.setLayoutParams(params)
+            imgView.layoutParams.height = 600
         }
         else {
             imgView = convertView as ImageView
@@ -31,7 +35,7 @@ public class ImageRecyclerAdapter(
         return imgView
     }
 
-    override fun getItem(position: Int): Any? {
+    override fun getItem(position: Int): Any {
         return fileNameList[position]
     }
 

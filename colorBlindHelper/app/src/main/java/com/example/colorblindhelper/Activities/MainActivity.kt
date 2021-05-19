@@ -1,12 +1,13 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.example.colorblindhelper.R
+import com.example.colorblindhelper.Classes.ViewPageAdapter
 import com.google.android.material.tabs.TabLayout
 
 

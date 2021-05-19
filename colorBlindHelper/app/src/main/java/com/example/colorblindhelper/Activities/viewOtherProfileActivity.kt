@@ -1,8 +1,6 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.app.Activity
-import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -11,14 +9,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import androidx.core.content.ContentProviderCompat.requireContext
-import com.google.firebase.database.ktx.database
+import com.example.colorblindhelper.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
-class viewOtherProfile : AppCompatActivity(), AdapterView.OnItemClickListener,
+class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickListener,
     View.OnClickListener {
     private var userName:String? = null
     var btnRequestFriend : Button? = null
@@ -73,7 +68,8 @@ class viewOtherProfile : AppCompatActivity(), AdapterView.OnItemClickListener,
 
     private fun sendRequest() {
         val db = Firebase.firestore
-        val request = RequestFriendship(Status.WAITING,
+        val request = RequestFriendship(
+            Status.WAITING,
             getUserName(applicationContext)!!, userName!!
         )
         db.collection("requests").document(userName!!).collection("newRequests").document(
@@ -116,12 +112,12 @@ class viewOtherProfile : AppCompatActivity(), AdapterView.OnItemClickListener,
         findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.VISIBLE
         findViewById<Button>(R.id.btnReject).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
-            RejectFriendRequest(applicationContext,userName,getUserName(applicationContext)!!)
+            RejectFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
             changeButtonStatus("ask to be a friends")
         }
         findViewById<Button>(R.id.btnAccept).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
-            AcceptFriendRequest(applicationContext,userName,getUserName(applicationContext)!!)
+            AcceptFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
             changeButtonStatus("friends")
         }
     }

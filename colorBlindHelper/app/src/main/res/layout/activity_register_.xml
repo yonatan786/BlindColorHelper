@@ -5,27 +5,22 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".Register_Activity">
+    tools:context=".Activities.Register_Activity">
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="wrap_content"
         >
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
-        android:background="@color/white"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-    <TextView
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register"
-        android:layout_gravity="fill_vertical"
-        android:textSize="30dp"
-        />
-    </com.google.android.material.appbar.AppBarLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:padding="10dp"
+            android:visibility="visible"
+            android:id="@+id/tvNoRequest"
+            android:textSize="30dp"
+            android:text="User Details"/>
 
     <RadioGroup
         android:layout_marginTop="20dp"

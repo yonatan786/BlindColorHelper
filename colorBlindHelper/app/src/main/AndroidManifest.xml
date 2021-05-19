@@ -15,15 +15,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ColorBlindHelper">
-        <activity android:name=".RequestActivity"></activity>
-        <activity android:name=".QuestionTestActivity" />
-        <activity android:name=".viewOtherProfile" />
+        <activity android:name=".Activities.RequestActivity"></activity>
+        <activity android:name=".Activities.QuestionTestActivity" />
+        <activity android:name=".Activities.viewOtherProfileActivity" />
         <activity android:name=".settingsActivity" />
-        <activity android:name=".Register_Activity" />
-        <activity android:name=".ViewImage" />
-        <activity android:name=".TestActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activities.Register_Activity" />
+        <activity android:name=".Activities.ViewImage" />
+        <activity android:name=".Activities.TestActivity" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

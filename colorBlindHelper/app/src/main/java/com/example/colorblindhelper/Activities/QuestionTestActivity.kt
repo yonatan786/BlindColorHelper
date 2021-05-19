@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.app.Activity
 import android.app.Dialog
@@ -10,6 +10,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.colorblindhelper.ClassifyBlindness
+import com.example.colorblindhelper.R
+import com.example.colorblindhelper.getUserName
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 

@@ -1,8 +1,7 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -10,6 +9,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.colorblindhelper.R
+import com.example.colorblindhelper.getUserName
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -90,7 +91,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                     showNotExistTestResultDialog(activity)
                 }
                 else{
-                    val intent = Intent(activity,MainActivity::class.java)
+                    val intent = Intent(activity, MainActivity::class.java)
                     activity.startActivity(intent)
                 }
             }
@@ -112,11 +113,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         dialog.findViewById<Button>(R.id.btnSkip).visibility=View.VISIBLE
         dialog.findViewById<Button>(R.id.btnPopup).setOnClickListener(View.OnClickListener{
             dialog.dismiss()
-            val intent = Intent(activity,TestActivity::class.java)
+            val intent = Intent(activity, TestActivity::class.java)
             activity.startActivity(intent)
         })
         dialog.findViewById<Button>(R.id.btnSkip).setOnClickListener(View.OnClickListener {
-            val intent = Intent(activity,MainActivity::class.java)
+            val intent = Intent(activity, MainActivity::class.java)
             activity.startActivity(intent)
         })
         dialog.show()

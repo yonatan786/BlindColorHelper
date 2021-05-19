@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 
 import android.app.Activity
 import android.content.Context
@@ -9,6 +9,11 @@ import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.colorblindhelper.Classes.commentModel
+import com.example.colorblindhelper.R
+import com.example.colorblindhelper.downloadImgViewProfile
+import com.example.colorblindhelper.getUserName
+import com.example.colorblindhelper.viewImg
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -75,7 +80,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
                 downloadImgViewProfile(applicationContext, model.getUserName(),holder.imgViewProfile!!)
                 holder.itemView.setOnClickListener {
                     if(model.getUserName() != getUserName(applicationContext)) {
-                        val intent = Intent(applicationContext, viewOtherProfile::class.java)
+                        val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
                         intent.putExtra("userNameProfile", model.getUserName())
                         startActivity(intent)
                     }

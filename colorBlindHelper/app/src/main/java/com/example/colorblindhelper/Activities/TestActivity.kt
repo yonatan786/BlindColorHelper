@@ -1,4 +1,4 @@
-package com.example.colorblindhelper
+package com.example.colorblindhelper.Activities
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.widget.Button
 import android.content.Intent
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import com.example.colorblindhelper.R
 
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
