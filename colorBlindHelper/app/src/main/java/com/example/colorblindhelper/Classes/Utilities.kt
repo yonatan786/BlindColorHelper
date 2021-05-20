@@ -91,6 +91,7 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
     return false
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 //private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 //{
 //    val result = Bitmap.createBitmap(w, h, bitmap.config)
@@ -141,6 +142,10 @@ fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
 
     private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 {
+=======
+private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
+{
+>>>>>>> parent of e64bd7c (minor changes)
     val result = Bitmap.createBitmap(w, h, bitmap.config)
     val pixels = IntArray(w * h)
     //get pixels
@@ -163,6 +168,7 @@ public fun getEditedImg(
 
 
     cameraPreview?.setImageBitmap(bitmap)
+<<<<<<< HEAD
     editCameraPreview.setImageBitmap(changeImg(bitmap))
 }
 
@@ -180,6 +186,14 @@ fun getUserData(context: Context){
 public fun saveImgInStorage(bitmap: Bitmap, context: Context)
 {
     val resultBitmap = changeImg(bitmap)
+=======
+    editCameraPreview.setImageBitmap(changeImg(bitmap, w, h))
+}
+
+public fun saveImgInStoarge(bitmap: Bitmap, context: Context)
+{
+    val resultBitmap = changeImg(bitmap, bitmap.width, bitmap.height)
+>>>>>>> parent of e64bd7c (minor changes)
 =======
     editCameraPreview.setImageBitmap(changeImg(bitmap, w, h))
 }
@@ -224,7 +238,11 @@ public fun viewImg (context: Context, storageRef: StorageReference, fileName:Str
         ref.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
 <<<<<<< HEAD
+<<<<<<< HEAD
             imageView.setImageBitmap(changeImg(bitmap))
+=======
+            imageView.setImageBitmap(changeImg(bitmap,bitmap.width,bitmap.height))
+>>>>>>> parent of e64bd7c (minor changes)
 =======
             imageView.setImageBitmap(changeImg(bitmap,bitmap.width,bitmap.height))
 >>>>>>> parent of e64bd7c (minor changes)
