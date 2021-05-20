@@ -22,7 +22,6 @@ import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -91,6 +90,7 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
     }
     return false
 }
+<<<<<<< HEAD
 //private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 //{
 //    val result = Bitmap.createBitmap(w, h, bitmap.config)
@@ -138,6 +138,20 @@ fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
         ClassifyBlindness.GREEN_BLIND -> arrayOf(0.625, 0.375, 0.0, 0.0, 0.0, 0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.3, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
         ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
     }
+=======
+private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
+{
+    val result = Bitmap.createBitmap(w, h, bitmap.config)
+    val pixels = IntArray(w * h)
+    //get pixels
+    bitmap.getPixels(pixels, 0, w, 0, 0, w, h)
+    for (x in pixels.indices)
+        if(Color.green(pixels[x]) >200 && Color.red(pixels[x]) > 200 && Color.blue(pixels[x]) >200)
+            pixels[x] = Color.BLACK
+    // create result bitmap output
+    result.setPixels(pixels, 0, w, 0, 0, w, h)
+    return result
+>>>>>>> parent of e64bd7c (minor changes)
 }
 public fun getEditedImg(
     bitmap: Bitmap,
@@ -150,6 +164,7 @@ public fun getEditedImg(
 
 
     cameraPreview?.setImageBitmap(bitmap)
+<<<<<<< HEAD
     editCameraPreview.setImageBitmap(changeImg(bitmap))
 }
 
@@ -167,6 +182,14 @@ fun getUserData(context: Context){
 public fun saveImgInStorage(bitmap: Bitmap, context: Context)
 {
     val resultBitmap = changeImg(bitmap)
+=======
+    editCameraPreview.setImageBitmap(changeImg(bitmap, w, h))
+}
+
+public fun saveImgInStoarge(bitmap: Bitmap, context: Context)
+{
+    val resultBitmap = changeImg(bitmap, bitmap.width, bitmap.height)
+>>>>>>> parent of e64bd7c (minor changes)
     val root  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+File.separator +"blindColorApp"
     File(root).mkdirs()
     val myDir =File(root)
@@ -202,7 +225,11 @@ public fun viewImg (context: Context, storageRef: StorageReference, fileName:Str
         val localFile = File.createTempFile("Images", "bmp");
         ref.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+<<<<<<< HEAD
             imageView.setImageBitmap(changeImg(bitmap))
+=======
+            imageView.setImageBitmap(changeImg(bitmap,bitmap.width,bitmap.height))
+>>>>>>> parent of e64bd7c (minor changes)
         }.addOnFailureListener {
             val account = GoogleSignIn.getLastSignedInAccount(context)
             if(account!=null)
