@@ -152,7 +152,7 @@ class uploadImageFragment : Fragment(), View.OnClickListener {
                     requireContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED) {
-                bitmap?.let { saveImgInStoarge(it, requireActivity()) }
+                bitmap?.let { saveImgInStorage(it, requireActivity()) }
             }
         }
         else if(v == btnUploadPicture)
