@@ -138,8 +138,8 @@ fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
         ClassifyBlindness.GREEN_BLIND -> arrayOf(0.625, 0.375, 0.0, 0.0, 0.0, 0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.3, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
         ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
     }
-=======
-private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
+
+    private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 {
     val result = Bitmap.createBitmap(w, h, bitmap.config)
     val pixels = IntArray(w * h)
@@ -151,7 +151,6 @@ private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
     // create result bitmap output
     result.setPixels(pixels, 0, w, 0, 0, w, h)
     return result
->>>>>>> parent of e64bd7c (minor changes)
 }
 public fun getEditedImg(
     bitmap: Bitmap,
@@ -164,7 +163,6 @@ public fun getEditedImg(
 
 
     cameraPreview?.setImageBitmap(bitmap)
-<<<<<<< HEAD
     editCameraPreview.setImageBitmap(changeImg(bitmap))
 }
 
