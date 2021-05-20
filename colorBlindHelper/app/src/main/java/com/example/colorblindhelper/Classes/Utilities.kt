@@ -1,11 +1,10 @@
 package com.example.colorblindhelper
-
-
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -17,10 +16,8 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.colorblindhelper.Activities.MainActivity
-import com.example.colorblindhelper.Activities.RC_REGISTER
-import com.example.colorblindhelper.Activities.Register_Activity
 import com.example.colorblindhelper.Activities.ViewImage
+import com.example.colorblindhelper.Classes.CurrentUser
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
@@ -31,13 +28,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.awaitAll
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
-import kotlin.collections.ArrayList
 
 
 enum class Gender {
@@ -48,7 +43,7 @@ fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, bi
 
     val db = Firebase.firestore
     val userName = getUserName(context) ?: return
-    val user = UserModel(userName,isGlasses,gender,birthDate)
+    val user = UserModel(userName,isGlasses,gender,birthDate,ClassifyBlindness.UNCLASSIFIED)
     db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
             Toast.makeText(context,"The details saved",Toast.LENGTH_SHORT).show()
@@ -110,8 +105,9 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
 //    return result
 //}
 
-private fun changeImg(bitmap: Bitmap,blindType: ClassifyBlindness) : Bitmap
+private fun changeImg(bitmap: Bitmap) : Bitmap
 {
+    val blindType = CurrentUser.instance.user.getBlindType()
     if(blindType == ClassifyBlindness.UNCLASSIFIED || blindType == ClassifyBlindness.NORMAL)
         return bitmap
     val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
@@ -154,37 +150,23 @@ public fun getEditedImg(
 
 
     cameraPreview?.setImageBitmap(bitmap)
-    editCameraPreview.setImageBitmap(changeImg(bitmap,getBlindType()))
+    editCameraPreview.setImageBitmap(changeImg(bitmap))
 }
 
-fun getBlindType(context: Context): ClassifyBlindness {
+fun getUserData(context: Context){
     val userName = getUserName(context)
     var blindType: ClassifyBlindness = ClassifyBlindness.NORMAL
-//        rootRef.collection("users").document(username!!).
-//            .addOnSuccessListener { documentSnapshot ->
-//                blindType = documentSnapshot.toObject(ClassifyBlindness::class.java)!!
-//            }.addOnFailureListener{
-//
-//            }
+    val rootRef = FirebaseFirestore.getInstance()
+    rootRef.collection("users").document(userName!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+               CurrentUser(documentSnapshot.toObject(UserModel::class.java)!!)
+            }.addOnFailureListener{
 
-    val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName)
-        .addSnapshotListener { snapshot, e ->
-            if (!snapshot?.isEmpty!!) {
-                blindType = when (snapshot.documents[0].get("blindType")) {
-                    "RED_BLIND" ->ClassifyBlindness.RED_BLIND
-                    "NORMAL"->ClassifyBlindness.NORMAL
-                    "GREEN_BLIND"->ClassifyBlindness.GREEN_BLIND
-                    "BLACK_WHITE_BLIND"->ClassifyBlindness.BLACK_WHITE_BLIND
-                    "UNCLASSIFIED"->ClassifyBlindness.UNCLASSIFIED
-                    else -> ClassifyBlindness.UNCLASSIFIED
-                }
             }
-        }
-    return blindType
 }
 public fun saveImgInStorage(bitmap: Bitmap, context: Context)
 {
-    val resultBitmap = changeImg(bitmap,getBlindType(context))
+    val resultBitmap = changeImg(bitmap)
     val root  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+File.separator +"blindColorApp"
     File(root).mkdirs()
     val myDir =File(root)
@@ -220,7 +202,7 @@ public fun viewImg (context: Context, storageRef: StorageReference, fileName:Str
         val localFile = File.createTempFile("Images", "bmp");
         ref.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-            imageView.setImageBitmap(changeImg(bitmap,getBlindType()))
+            imageView.setImageBitmap(changeImg(bitmap))
         }.addOnFailureListener {
             val account = GoogleSignIn.getLastSignedInAccount(context)
             if(account!=null)

@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.colorblindhelper.R
+import com.example.colorblindhelper.getUserData
 import com.example.colorblindhelper.getUserName
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -67,6 +68,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             handleSignInResult(task)
         }
         if(requestCode == RC_REGISTER && resultCode == RESULT_OK) {
+            getUserData(applicationContext)
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
@@ -84,6 +86,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun automaticLogIn(userName: String, activity: Activity, isChecking:Boolean=false) {
+        getUserData(applicationContext)
         val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName).addSnapshotListener{ snapshot, e ->
             if (!snapshot?.isEmpty!!){
 
