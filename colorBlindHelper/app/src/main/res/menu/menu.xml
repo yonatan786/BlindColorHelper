@@ -15,10 +15,10 @@
         android:icon="@drawable/ic_baseline_settings_24"
         android:id="@+id/itemSettings"
         app:showAsAction="ifRoom">
-        <item android:title="update details"
+        <item android:title="Update details"
             android:id="@+id/itemDetails"
             />
-        <item android:title="make a new test"
+        <item android:title="New color blind test"
             android:id="@+id/itemNewTest"
             />
     </item>

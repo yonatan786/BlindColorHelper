@@ -51,7 +51,7 @@ fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, bi
     val user = UserModel(userName,isGlasses,gender,birthDate)
     db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
-            Toast.makeText(context,"The details saved",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"The details are saved",Toast.LENGTH_SHORT).show()
         }
         .addOnFailureListener { e ->
             Toast.makeText(context,"Failed to upload the details",Toast.LENGTH_SHORT).show()
@@ -109,7 +109,10 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
 //    result.setPixels(pixels, 0, w, 0, 0, w, h)
 //    return result
 //}
-
+private fun colorLimit(x: Double) : Int
+{
+    return minOf(maxOf(x.toInt(),0),255)
+}
 private fun changeImg(bitmap: Bitmap,blindType: ClassifyBlindness) : Bitmap
 {
     if(blindType == ClassifyBlindness.UNCLASSIFIED || blindType == ClassifyBlindness.NORMAL)
@@ -120,14 +123,12 @@ private fun changeImg(bitmap: Bitmap,blindType: ClassifyBlindness) : Bitmap
     bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
     for (x in pixels.indices) {
         val r =
-            ((Color.red(pixels[x]) * filterMatrix[0]) + (Color.green(pixels[x]) * filterMatrix[1]) + (Color.blue(pixels[x]) * filterMatrix[2]) + (Color.alpha(pixels[x]) * filterMatrix[3]) + filterMatrix[4]);
+            colorLimit((Color.red(pixels[x]) * filterMatrix[0]) + (Color.green(pixels[x]) * filterMatrix[1]) + (Color.blue(pixels[x]) * filterMatrix[2]))
         val g =
-            ((Color.red(pixels[x]) * filterMatrix[5]) + (Color.green(pixels[x]) * filterMatrix[6]) + (Color.blue(pixels[x]) * filterMatrix[7]) + (Color.alpha(pixels[x]) * filterMatrix[8]) + filterMatrix[9]);
+            colorLimit((Color.red(pixels[x]) * filterMatrix[3]) + (Color.green(pixels[x]) * filterMatrix[4]) + (Color.blue(pixels[x]) * filterMatrix[5]))
         val b =
-            ((Color.red(pixels[x]) * filterMatrix[10]) + (Color.green(pixels[x]) * filterMatrix[11]) + (Color.blue(pixels[x]) * filterMatrix[12]) + (Color.alpha(pixels[x]) * filterMatrix[13]) + filterMatrix[14]);
-        val a =
-            ((Color.red(pixels[x]) * filterMatrix[15]) + (Color.green(pixels[x]) * filterMatrix[16]) + (Color.blue(pixels[x]) * filterMatrix[17]) + (Color.alpha(pixels[x]) * filterMatrix[18]) + filterMatrix[19]);
-        pixels[x] = Color.argb(a.toInt(),r.toInt(),g.toInt(),b.toInt())
+            colorLimit((Color.red(pixels[x]) * filterMatrix[6]) + (Color.green(pixels[x]) * filterMatrix[7]) + (Color.blue(pixels[x]) * filterMatrix[8]));
+        pixels[x] = Color.rgb(r,g,b)
     }
         // create result bitmap output
         result.setPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
@@ -135,12 +136,19 @@ private fun changeImg(bitmap: Bitmap,blindType: ClassifyBlindness) : Bitmap
 }
 
 fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
+//    return when(blindType) {
+//        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+//        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+//        ClassifyBlindness.RED_BLIND -> arrayOf(1.04871, -0.06124, -0.016149, 0.4999456,0.4018163,0.0670727,0.622638,-0.7142829,1.1090876)
+//        ClassifyBlindness.GREEN_BLIND -> arrayOf(1.207, -0.40164, 0.1923, 0.050346, 0.96232, -0.0024459, -0.1272146, 0.16927233, 0.9832832)
+//        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.1942258, 0.652747, 0.1484325, 0.2435959, 0.660768, 0.1364899, 0.201588, 0.6132569,0.21213619)
+//    }
     return when(blindType) {
-        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.RED_BLIND -> arrayOf(0.567, 0.433, 0.0, 0.0, 0.0, 0.558, 0.442, 0.0, 0.0, 0.0, 0.0, 0.242, 0.758, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.GREEN_BLIND -> arrayOf(0.625, 0.375, 0.0, 0.0, 0.0, 0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.3, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.RED_BLIND -> arrayOf(1.048, -0.061, -0.016, 0.499,0.401,0.067,0.622,-0.714,1.109)
+        ClassifyBlindness.GREEN_BLIND -> arrayOf(1.207, -0.401, 0.192, 0.050, 0.962, -0.002, -0.127, 0.169, 0.983)
+        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.194, 0.652, 0.148, 0.243, 0.660, 0.136, 0.201, 0.613,0.212)
     }
 }
 public fun getEditedImg(
@@ -157,34 +165,35 @@ public fun getEditedImg(
     editCameraPreview.setImageBitmap(changeImg(bitmap,getBlindType()))
 }
 
-fun getBlindType(context: Context): ClassifyBlindness {
-    val userName = getUserName(context)
-    var blindType: ClassifyBlindness = ClassifyBlindness.NORMAL
-//        rootRef.collection("users").document(username!!).
-//            .addOnSuccessListener { documentSnapshot ->
-//                blindType = documentSnapshot.toObject(ClassifyBlindness::class.java)!!
-//            }.addOnFailureListener{
+fun getBlindType(): ClassifyBlindness {
+//    val userName = getUserName(context)
+//    var blindType: ClassifyBlindness = ClassifyBlindness.NORMAL
+////        rootRef.collection("users").document(username!!).
+////            .addOnSuccessListener { documentSnapshot ->
+////                blindType = documentSnapshot.toObject(ClassifyBlindness::class.java)!!
+////            }.addOnFailureListener{
+////
+////            }
 //
+//    val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName)
+//        .addSnapshotListener { snapshot, e ->
+//            if (!snapshot?.isEmpty!!) {
+//                blindType = when (snapshot.documents[0].get("blindType")) {
+//                    "RED_BLIND" ->ClassifyBlindness.RED_BLIND
+//                    "NORMAL"->ClassifyBlindness.NORMAL
+//                    "GREEN_BLIND"->ClassifyBlindness.GREEN_BLIND
+//                    "BLACK_WHITE_BLIND"->ClassifyBlindness.BLACK_WHITE_BLIND
+//                    "UNCLASSIFIED"->ClassifyBlindness.UNCLASSIFIED
+//                    else -> ClassifyBlindness.UNCLASSIFIED
+//                }
 //            }
-
-    val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName)
-        .addSnapshotListener { snapshot, e ->
-            if (!snapshot?.isEmpty!!) {
-                blindType = when (snapshot.documents[0].get("blindType")) {
-                    "RED_BLIND" ->ClassifyBlindness.RED_BLIND
-                    "NORMAL"->ClassifyBlindness.NORMAL
-                    "GREEN_BLIND"->ClassifyBlindness.GREEN_BLIND
-                    "BLACK_WHITE_BLIND"->ClassifyBlindness.BLACK_WHITE_BLIND
-                    "UNCLASSIFIED"->ClassifyBlindness.UNCLASSIFIED
-                    else -> ClassifyBlindness.UNCLASSIFIED
-                }
-            }
-        }
-    return blindType
+//        }
+//    return blindType
+    return ClassifyBlindness.BLACK_WHITE_BLIND
 }
 public fun saveImgInStorage(bitmap: Bitmap, context: Context)
 {
-    val resultBitmap = changeImg(bitmap,getBlindType(context))
+    val resultBitmap = changeImg(bitmap,getBlindType())
     val root  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+File.separator +"blindColorApp"
     File(root).mkdirs()
     val myDir =File(root)

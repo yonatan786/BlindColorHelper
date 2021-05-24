@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
+            android:textColor="#232F34"
             android:padding="10dp"
             android:visibility="visible"
             android:id="@+id/tvNoRequest"
@@ -23,6 +24,7 @@
             android:text="User Details"/>
 
     <RadioGroup
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,24 +33,28 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Do you hand glasses?"
+            android:textColor="#232F34"
+            android:textStyle="bold"
+            android:text="Do you wear glasses?"
             android:textSize="20dp"
             />
         <RadioButton
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/radioGlassesYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="yes"
+            android:text="Yes"
+            android:textColor="#344955"
             android:checked="false"
             android:textSize="20dp" />
 
         <RadioButton
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/radioGlassesNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="no"
+            android:textColor="#344955"
+            android:text="No"
             android:checked="false"
 
             android:textSize="20dp" />
@@ -56,30 +62,42 @@
 
     <RadioGroup
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:orientation="horizontal"
         android:id="@+id/radioGender">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#232F34"
+            android:textStyle="bold"
+            android:text="Gender: "
+            android:textSize="20dp"
+            />
         <RadioButton
             android:id="@+id/radioMale"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
             android:checked="false"
+            android:textColor="#344955"
             android:textSize="20dp" />
 
         <RadioButton
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/radioFemale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Female"
             android:checked="false"
+            android:textColor="#344955"
             android:textSize="20dp" />
     </RadioGroup>
     <LinearLayout
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center|left"
@@ -87,11 +105,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Birth Date"
+            android:textStyle="bold"
+            android:textColor="#232F34"
+            android:text="Date of Birth: "
             android:textSize="20dp"
             />
         <DatePicker
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/datePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -113,7 +133,13 @@
             android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next" />
+            android:layout_marginBottom="60dp"
+            android:layout_marginEnd="60dp"
+            android:background="@drawable/rounded_button"
+            android:textColor="#232F34"
+            app:backgroundTint="@null"
+            android:textStyle="bold"
+            android:text="NEXT" />
     </LinearLayout>
 
 </LinearLayout>

@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_marginTop="10dp"
+    android:layout_marginLeft="10dp"
     android:background="@color/white"
     android:gravity="left|center"
     >
@@ -19,19 +20,35 @@
         android:requiresFadingEdge="vertical"
         app:cardCornerRadius="30dp"
         android:thicknessRatio="1.9">
+        <RelativeLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp">
         <ImageView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:background="@drawable/circ"
+            android:id="@+id/BorderImg3"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true">
+        </ImageView>
+        <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_margin="2dp"
+            android:background="@drawable/circ_inner_profile"
             android:src="@drawable/ic_baseline_person_dark"
             android:id="@+id/ImgViewProfile"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
         </ImageView>
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
     <TextView
         android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="userName"
+        android:textSize="15sp"
+        android:textColor="#344955"
+        android:text="Username"
         android:id="@+id/tvUserName"/>
 </LinearLayout>

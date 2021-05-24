@@ -107,9 +107,9 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     {
         val dialog : Dialog = Dialog(this)
         dialog.setContentView(R.layout.result)
-        dialog.findViewById<TextView>(R.id.resText).text = "you didn't finish the blind test"
-        dialog.findViewById<TextView>(R.id.result).text = "Finishing blind test"
-        dialog.findViewById<Button>(R.id.btnPopup).text = "Go now"
+        dialog.findViewById<TextView>(R.id.resText).text = "You haven't completed the test!"
+        dialog.findViewById<TextView>(R.id.result).text = "Color Blind Test"
+        dialog.findViewById<Button>(R.id.btnPopup).text = "Go Now"
         dialog.findViewById<Button>(R.id.btnSkip).visibility=View.VISIBLE
         dialog.findViewById<Button>(R.id.btnPopup).setOnClickListener(View.OnClickListener{
             dialog.dismiss()

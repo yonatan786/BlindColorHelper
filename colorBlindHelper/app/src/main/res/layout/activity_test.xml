@@ -11,16 +11,14 @@
         android:layout_width="269dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="76dp"
-        android:layout_marginLeft="76dp"
         android:layout_marginTop="34dp"
         android:layout_marginEnd="65dp"
-        android:layout_marginRight="65dp"
+        android:textColor="#232F34"
+        android:textStyle="bold"
         android:text="Color Blind Test"
         android:textSize="30sp" />
 
@@ -30,13 +28,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/plate1"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="18dp"
         android:layout_marginTop="34dp"
         android:text="What is this?"
         android:textSize="25sp"
+        android:textColor="#232F34"
         android:textStyle="bold" />
 
     <TextView
@@ -45,16 +42,13 @@
         android:layout_height="34dp"
         android:layout_below="@+id/whatis"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="22dp"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="105dp"
-        android:layout_marginRight="105dp"
         android:text="How is it performed?"
         android:textStyle="bold"
+        android:textColor="#232F34"
         android:textSize="25sp" />
 
     <TextView
@@ -64,8 +58,8 @@
         android:layout_below="@+id/how"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="42dp"
-        android:layout_marginLeft="42dp"
         android:layout_marginTop="23dp"
+        android:textColor="#344955"
         android:text="In the following test, you will be given plates with dots in different sizes and colors. These dots form a shape of a number and you are asked to type that number."
         android:textSize="20sp" />
 
@@ -76,10 +70,10 @@
         android:layout_below="@+id/howto"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="42dp"
-        android:layout_marginLeft="42dp"
         android:layout_marginTop="14dp"
         android:text="Leave the field blank in case you don't see anything."
         android:textStyle="bold|italic"
+        android:textColor="#232F34"
         android:textSize="20sp" />
 
     <TextView
@@ -88,11 +82,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/about"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="22dp"
         android:layout_marginTop="19dp"
+        android:textColor="#344955"
         android:text="Color blind test is used in order to determine whether you have a color deficiency, and to classify which one is it."
         android:textSize="20sp" />
 
@@ -101,10 +94,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
+        android:background="@drawable/rounded_button"
+        android:textColor="#232F34"
+        app:backgroundTint="@null"
+        android:textStyle="bold"
         android:layout_marginBottom="60dp"
         android:text="START" />
 

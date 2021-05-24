@@ -114,7 +114,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
                 firebaseUpdate()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context,"Failed to upload the comment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Failed to upload comment", Toast.LENGTH_SHORT).show()
             }
 
     }

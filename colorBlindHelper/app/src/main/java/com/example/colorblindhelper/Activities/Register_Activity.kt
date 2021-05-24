@@ -97,7 +97,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         when(idRadioIsGlasses){
             idRadioGlassesNo -> return false
             idRadioGlassesYes -> return true
-            -1 -> findViewById<RadioButton>(R.id.radioGlassesNo).error = "you must check option"
+            -1 -> findViewById<RadioButton>(R.id.radioGlassesNo).error = "You must choose an option"
         }
         return null
     }
@@ -108,7 +108,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         when(idRadioGender){
             idRadioMale -> return Gender.MALE
             idRadioFemale ->return Gender.FEMALE
-            -1 -> findViewById<RadioButton>(R.id.radioFemale).error = "you must check option"
+            -1 -> findViewById<RadioButton>(R.id.radioFemale).error = "You must choose an option"
         }
         return null
     }
@@ -138,7 +138,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
             R.id.itemGoBack -> {
                 if(requestIntentFlag!! == RequestType.SIGN_IN)
                 {
-                    Toast.makeText(applicationContext,"you didn't finish the registering",Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext,"Registration incomplete!",Toast.LENGTH_LONG).show()
                 }
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_CANCELED, returnIntent);
