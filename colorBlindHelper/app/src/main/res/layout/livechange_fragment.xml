@@ -11,20 +11,14 @@
     <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="right"
-        android:layout_marginRight="10dp"
         android:id="@+id/btnSavePicture"
         android:visibility="invisible"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save" />
+        android:text="save" />
     <LinearLayout
         android:layout_marginTop="25dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginLeft="2dp"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -32,15 +26,14 @@
             android:id="@+id/cameraView"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            app:srcCompat="@drawable/baseline_camera_enhance_24"
+            app:srcCompat="@android:drawable/ic_menu_camera"
             tools:ignore="MissingConstraints"
             />
         <ImageView
             android:id="@+id/editCameraView"
-            android:layout_marginLeft="2dp"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            app:srcCompat="@drawable/baseline_camera_enhance_24"
+            app:srcCompat="@android:drawable/ic_menu_camera"
             tools:ignore="MissingConstraints"
             />
     </LinearLayout>
@@ -54,23 +47,15 @@
             android:id="@+id/btnStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:textColor="#232F34"
-            app:backgroundTint="@null"
-            android:textStyle="bold"
             android:text="start!" />
         <Button
             android:visibility="gone"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:id="@+id/btnUploadPicture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button"
-            android:textColor="#232F34"
-            app:backgroundTint="@null"
-            android:textStyle="bold"
             android:text="upload picture" />
-    </LinearLayout>
+    </LinearLayout>>
 
 
 </LinearLayout>

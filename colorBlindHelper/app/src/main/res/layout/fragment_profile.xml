@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
             android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="100dp"
@@ -31,38 +30,22 @@
             android:requiresFadingEdge="vertical"
             app:cardCornerRadius="100dp"
             android:thicknessRatio="1.9">
-            <RelativeLayout
-                android:layout_width="100dp"
-                android:layout_height="100dp">
-                <ImageView
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    android:background="@drawable/circ"
-                    android:id="@+id/BorderImg"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true">
-                </ImageView>
             <ImageView
-                android:layout_height="match_parent"
+                android:layout_height="100dp"
                 android:layout_width="match_parent"
-                android:layout_margin="2dp"
-                android:background="@drawable/circ_inner_profile"
                 android:src="@drawable/ic_baseline_person_dark"
                 android:id="@+id/ImgViewProfile"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true">
-
             </ImageView>
-            </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
             <TextView
                 android:layout_marginTop="5dp"
                 android:id="@+id/tvChangeProfilePhoto"
-                android:text="Change profile picture"
+                android:text="Change profile photo"
                 android:textStyle="bold"
-                android:textColor="#232F34"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 android:layout_height="match_parent"
                 android:layout_width="wrap_content"
                 android:gravity="left|bottom"/>
@@ -77,7 +60,6 @@
             android:id="@+id/tvUserName"
             android:text="yonatan"
             android:textStyle="bold"
-            android:textColor="#232F34"
             android:textSize="30dp"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -87,38 +69,25 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:id="@+id/btnRequestFriend"
-                android:background="@drawable/rounded_button"
-                android:textColor="#232F34"
-                app:backgroundTint="@null"
-                android:textStyle="bold"
-                android:text="ADD AS FRIEND"
+                android:text="ask to be a friends"
                 android:layout_marginTop="10dp"
                 />
             <LinearLayout
+                android:paddingTop="10dp"
                 android:id="@+id/layoutRequest"
-                android:layout_marginTop="10dp"
                 android:visibility="gone"
-                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent">
                 <Button
-
+                    android:layout_marginLeft="40dp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:background="@drawable/rounded_button"
-                    android:textColor="#232F34"
-                    app:backgroundTint="@null"
-                    android:textStyle="bold"
-                    android:text="Accept"
+                    android:text="accept"
                     android:id="@+id/btnAccept"/>
                 <Button
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:background="@drawable/rounded_button"
-                    android:textColor="#232F34"
-                    app:backgroundTint="@null"
-                    android:textStyle="bold"
                     android:text="Reject"
                     android:id="@+id/btnReject"/>
         </LinearLayout>
@@ -128,9 +97,6 @@
 
     <GridView
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
         android:id="@+id/gradeView"
         android:layout_height="match_parent"
         android:layout_width="match_parent"

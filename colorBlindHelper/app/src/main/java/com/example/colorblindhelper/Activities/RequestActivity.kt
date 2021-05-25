@@ -60,10 +60,10 @@ class RequestActivity : AppCompatActivity() {
             }
             override fun onDataChanged() {
                 if(itemCount == 0) {
-                    findViewById<TextView>(R.id.tvNoRequest).text = "There are no Friend Requests..."
+                    findViewById<TextView>(R.id.tvNoRequest).text = "There aren't requests..."
                 }
                 else {
-                    findViewById<TextView>(R.id.tvNoRequest).text = "Friend Requests"
+                    findViewById<TextView>(R.id.tvNoRequest).text = "requests"
                 }
             }
         }

@@ -15,8 +15,6 @@
         android:layout_height="wrap_content"
         android:text="Test Results"
         android:textSize="30sp"
-        android:gravity="center"
-        android:textColor="#232F34"
         android:layout_marginTop="15dp"
         android:textStyle="bold" />
 
@@ -25,35 +23,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="default"
-        android:gravity="center"
-        android:textColor="#344955"
         android:layout_marginTop="15dp"
-        android:textSize="22sp" />
+        android:textSize="25sp" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_marginTop="15dp"
         android:orientation="horizontal">
     <Button
         android:id="@+id/btnPopup"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
+        android:layout_marginTop="15dp"
         android:text="CLOSE" />
     <Button
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:id="@+id/btnSkip"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:visibility="gone"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
-        android:text="ASK LATER" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="I'll do it later" />
+    </LinearLayout>>
 </LinearLayout>

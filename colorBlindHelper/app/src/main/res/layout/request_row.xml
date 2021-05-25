@@ -12,7 +12,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginLeft="10dp"
         android:elevation="12dp"
         android:id="@+id/view2"
         android:innerRadius="5dp"
@@ -20,55 +19,31 @@
         android:requiresFadingEdge="vertical"
         app:cardCornerRadius="30dp"
         android:thicknessRatio="1.9">
-        <RelativeLayout
-            android:layout_width="70dp"
-            android:layout_height="70dp">
         <ImageView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:background="@drawable/circ"
-            android:id="@+id/BorderImg2"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true">
-        </ImageView>
-        <ImageView
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:layout_margin="1.5dp"
-            android:background="@drawable/circ_inner_profile"
             android:src="@drawable/ic_baseline_person_dark"
             android:id="@+id/ImgViewProfile"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
         </ImageView>
-        </RelativeLayout>
     </androidx.cardview.widget.CardView>
     <TextView
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="Username"
-        android:textSize="15sp"
-        android:textColor="#344955"
+        android:text="userName"
         android:id="@+id/tvUserName"/>
+    <Button
+        android:layout_marginLeft="40dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="accept"
+        android:id="@+id/btnAccept"/>
     <Button
         android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
-        android:text="Accept"
-        android:id="@+id/btnAccept"/>
-    <Button
-        android:layout_marginLeft="10dp"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
         android:text="Reject"
         android:id="@+id/btnReject"/>
 </LinearLayout>

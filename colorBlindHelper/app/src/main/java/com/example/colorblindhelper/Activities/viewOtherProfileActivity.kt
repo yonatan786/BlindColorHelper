@@ -91,8 +91,8 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 if(snapshot?.exists() == true)
                 {
                     when(snapshot.get("status")){
-                        "WAITING" -> changeButtonStatus("Waiting...")
-                        "FRIENDS" -> changeButtonStatus("Friends")
+                        "WAITING" -> changeButtonStatus("waiting...")
+                        "FRIENDS" -> changeButtonStatus("friends")
                     }
                 }
         }
@@ -113,12 +113,12 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         findViewById<Button>(R.id.btnReject).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
             RejectFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
-            changeButtonStatus("Ask to be a friends")
+            changeButtonStatus("ask to be a friends")
         }
         findViewById<Button>(R.id.btnAccept).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
             AcceptFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
-            changeButtonStatus("Friends")
+            changeButtonStatus("friends")
         }
     }
 

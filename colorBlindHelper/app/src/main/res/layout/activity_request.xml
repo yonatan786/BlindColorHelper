@@ -11,16 +11,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textStyle="bold"
-        android:textColor="#232F34"
         android:padding="10dp"
         android:visibility="visible"
         android:id="@+id/tvNoRequest"
         android:textSize="20dp"
-        android:text="Friend Requests"/>
-
+        android:text="requests"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRequestsList"
-        android:layout_width="392dp"
-        android:layout_height="680dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

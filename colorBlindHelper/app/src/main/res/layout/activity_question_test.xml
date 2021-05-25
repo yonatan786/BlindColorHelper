@@ -11,13 +11,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="63dp"
+        android:layout_marginLeft="63dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="54dp"
-        android:textColor="#344955"
+        android:layout_marginRight="54dp"
         android:text="Example: This number is 12. Click 'Next' to continue."
         android:textSize="20sp" />
 
@@ -38,14 +41,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="100dp"
+        android:layout_marginLeft="99dp"
         android:layout_marginBottom="126dp"
         android:ems="10"
         android:maxLines="1"
         android:inputType="number"
-        android:textColor="#344955"
         android:hint="Write number here..." />
 
     <Button
@@ -53,12 +57,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
         android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
         android:layout_marginBottom="50dp"
         android:text="NEXT" />
 
@@ -67,12 +69,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/rounded_button"
-        android:textColor="#232F34"
-        app:backgroundTint="@null"
-        android:textStyle="bold"
         android:layout_marginStart="60dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginBottom="50dp"
         android:text="PREVIOUS" />
 
