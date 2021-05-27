@@ -132,7 +132,7 @@ class uploadImageFragment : Fragment(), View.OnClickListener {
         bitmap = MediaStore.Images.Media.getBitmap(context?.getContentResolver(), imageUri)
         imgViewEditCamera?.visibility = View.VISIBLE
         if(bitmap != null)
-            getEditedImg(bitmap!!, bitmap!!.width, bitmap!!.height, null, imgViewEditCamera!!)
+            getEditedImg(bitmap!!, bitmap!!.width, bitmap!!.height, null, imgViewEditCamera!!,requireContext())
 
     }
 
@@ -152,7 +152,7 @@ class uploadImageFragment : Fragment(), View.OnClickListener {
                     requireContext(),
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED) {
-                bitmap?.let { saveImgInStoarge(it, requireActivity()) }
+                bitmap?.let { saveImgInStorage(it, requireActivity()) }
             }
         }
         else if(v == btnUploadPicture)

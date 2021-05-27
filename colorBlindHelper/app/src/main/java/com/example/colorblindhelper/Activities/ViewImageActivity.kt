@@ -16,6 +16,7 @@ import com.example.colorblindhelper.getUserName
 import com.example.colorblindhelper.viewImg
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -63,7 +64,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         return true
     }
     private fun firebaseUpdate() {
-        val query  = FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/")
+        val query  = FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/").orderBy("timeStamp")
         val options = FirestoreRecyclerOptions.Builder<commentModel>()
             .setQuery(query, commentModel::class.java)
             .setLifecycleOwner(this)
@@ -109,12 +110,13 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         fileName: String,
         context:Context
     ) {
-       FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/").add(commentModel(userSend,commentText))
+       FirebaseFirestore.getInstance().collection("photos/$userName/$fileName/").add(commentModel(userSend,commentText,
+           ))
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(context,"Failed to upload the comment", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Failed to upload comment", Toast.LENGTH_SHORT).show()
             }
 
     }

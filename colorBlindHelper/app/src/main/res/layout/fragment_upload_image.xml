@@ -11,12 +11,20 @@
     <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/btnSavePicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="save" />
+        android:background="@drawable/rounded_button"
+        android:textColor="#232F34"
+        app:backgroundTint="@null"
+        android:textStyle="bold"
+        android:text="Save" />
     <LinearLayout
         android:paddingTop="15dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -27,14 +35,15 @@
         android:id="@+id/cameraView"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat="@drawable/baseline_arrow_circle_up_24"
         tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/editCameraView"
+        android:layout_marginLeft="2dp"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:srcCompat="@drawable/baseline_camera_enhance_24"
         android:visibility="gone"
         tools:ignore="MissingConstraints"
         />
@@ -44,14 +53,18 @@
         android:id="@+id/btnUploadPicture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button"
+        android:textColor="#232F34"
+        app:backgroundTint="@null"
+        android:textStyle="bold"
         android:text="upload picture" />
 
     <TextView
         android:id="@+id/tvSelectPicture"
         android:layout_width="wrap_content"
-        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="15dp"
-        android:text="select different picture" />
+        android:textSize="18sp"
+        android:textColor="#344955"
+        android:text="Select a picture to upload" />
 </LinearLayout>

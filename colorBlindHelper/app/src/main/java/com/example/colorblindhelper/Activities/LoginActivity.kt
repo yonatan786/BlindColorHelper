@@ -10,8 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.colorblindhelper.R
-import com.example.colorblindhelper.getUserData
 import com.example.colorblindhelper.getUserName
+import com.example.colorblindhelper.updateBlindType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onStart()
         val account = GoogleSignIn.getLastSignedInAccount(this)
         if(account != null /*adding check */ ) {
-            getUserName(this)?.let { automaticLogIn(it,this) }
+            getUserName(this)?.let { LogIn(it,this) }
         }
 
     }
@@ -68,16 +68,14 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             handleSignInResult(task)
         }
         if(requestCode == RC_REGISTER && resultCode == RESULT_OK) {
-            getUserData(applicationContext)
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            getUserName(this)?.let { LogIn(it, this) }
         }
 
     }
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            getUserName(applicationContext)?.let { automaticLogIn(it, this, true) }
+            getUserName(applicationContext)?.let { LogIn(it, this, true) }
         } catch (e: ApiException) {
             Toast.makeText(applicationContext,"the connection failed",Toast.LENGTH_SHORT).show()
             Toast.makeText(applicationContext,"signInResult:failed code=" + e.getStatusCode(),Toast.LENGTH_SHORT).show()
@@ -85,11 +83,10 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun automaticLogIn(userName: String, activity: Activity, isChecking:Boolean=false) {
-        getUserData(applicationContext)
+    private fun LogIn(userName: String, activity: Activity, isChecking:Boolean=false) {
         val rootRef = Firebase.firestore.collection("users").whereEqualTo("userName", userName).addSnapshotListener{ snapshot, e ->
             if (!snapshot?.isEmpty!!){
-
+                updateBlindType(snapshot.documents[0].get("blindType").toString(),this)
                 if(snapshot.documents[0].get("blindType") == "UNCLASSIFIED") {
                     showNotExistTestResultDialog(activity)
                 }
@@ -106,13 +103,16 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             }
         };
     }
+
+
+
     private fun showNotExistTestResultDialog(activity: Activity)
     {
         val dialog : Dialog = Dialog(this)
         dialog.setContentView(R.layout.result)
-        dialog.findViewById<TextView>(R.id.resText).text = "you didn't finish the blind test"
-        dialog.findViewById<TextView>(R.id.result).text = "Finishing blind test"
-        dialog.findViewById<Button>(R.id.btnPopup).text = "Go now"
+        dialog.findViewById<TextView>(R.id.resText).text = "You haven't completed the test!"
+        dialog.findViewById<TextView>(R.id.result).text = "Color Blind Test"
+        dialog.findViewById<Button>(R.id.btnPopup).text = "Go Now"
         dialog.findViewById<Button>(R.id.btnSkip).visibility=View.VISIBLE
         dialog.findViewById<Button>(R.id.btnPopup).setOnClickListener(View.OnClickListener{
             dialog.dismiss()

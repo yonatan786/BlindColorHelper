@@ -1,10 +1,11 @@
-@file:Suppress("UNREACHABLE_CODE")
-
 package com.example.colorblindhelper
+
+
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -18,36 +19,47 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.colorblindhelper.Activities.MainActivity
+import com.example.colorblindhelper.Activities.RC_REGISTER
+import com.example.colorblindhelper.Activities.Register_Activity
 import com.example.colorblindhelper.Activities.ViewImage
-import com.example.colorblindhelper.Classes.CurrentUser
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.awaitAll
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
+import kotlin.collections.ArrayList
 
 
 enum class Gender {
     MALE,FEMALE
 }
-
+fun updateBlindType(blindTypeText:String,activity: Activity) {
+    val editor = activity.getSharedPreferences("blindTypeInfo", MODE_PRIVATE).edit();
+    editor.putString("blindType", blindTypeText);
+    editor.apply()
+}
 fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, birthDate: String) {
 
     val db = Firebase.firestore
     val userName = getUserName(context) ?: return
-    val user = UserModel(userName,isGlasses,gender,birthDate,ClassifyBlindness.UNCLASSIFIED)
+    val user = UserModel(userName,isGlasses,gender,birthDate)
     db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
-            Toast.makeText(context,"The details saved",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"The details are saved",Toast.LENGTH_SHORT).show()
         }
         .addOnFailureListener { e ->
             Toast.makeText(context,"Failed to upload the details",Toast.LENGTH_SHORT).show()
@@ -92,7 +104,6 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
     }
     return false
 }
-
 //private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 //{
 //    val result = Bitmap.createBitmap(w, h, bitmap.config)
@@ -106,10 +117,12 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
 //    result.setPixels(pixels, 0, w, 0, 0, w, h)
 //    return result
 //}
-
-private fun changeImg(bitmap: Bitmap) : Bitmap
+private fun colorLimit(x: Double) : Int
 {
-    val blindType = CurrentUser.instance.user.getBlindType()
+    return minOf(maxOf(x.toInt(),0),255)
+}
+private fun changeImg(bitmap: Bitmap,blindType: ClassifyBlindness) : Bitmap
+{
     if(blindType == ClassifyBlindness.UNCLASSIFIED || blindType == ClassifyBlindness.NORMAL)
         return bitmap
     val result = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
@@ -118,14 +131,12 @@ private fun changeImg(bitmap: Bitmap) : Bitmap
     bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
     for (x in pixels.indices) {
         val r =
-            ((Color.red(pixels[x]) * filterMatrix[0]) + (Color.green(pixels[x]) * filterMatrix[1]) + (Color.blue(pixels[x]) * filterMatrix[2]) + (Color.alpha(pixels[x]) * filterMatrix[3]) + filterMatrix[4]);
+            colorLimit((Color.red(pixels[x]) * filterMatrix[0]) + (Color.green(pixels[x]) * filterMatrix[1]) + (Color.blue(pixels[x]) * filterMatrix[2]))
         val g =
-            ((Color.red(pixels[x]) * filterMatrix[5]) + (Color.green(pixels[x]) * filterMatrix[6]) + (Color.blue(pixels[x]) * filterMatrix[7]) + (Color.alpha(pixels[x]) * filterMatrix[8]) + filterMatrix[9]);
+            colorLimit((Color.red(pixels[x]) * filterMatrix[3]) + (Color.green(pixels[x]) * filterMatrix[4]) + (Color.blue(pixels[x]) * filterMatrix[5]))
         val b =
-            ((Color.red(pixels[x]) * filterMatrix[10]) + (Color.green(pixels[x]) * filterMatrix[11]) + (Color.blue(pixels[x]) * filterMatrix[12]) + (Color.alpha(pixels[x]) * filterMatrix[13]) + filterMatrix[14]);
-        val a =
-            ((Color.red(pixels[x]) * filterMatrix[15]) + (Color.green(pixels[x]) * filterMatrix[16]) + (Color.blue(pixels[x]) * filterMatrix[17]) + (Color.alpha(pixels[x]) * filterMatrix[18]) + filterMatrix[19]);
-        pixels[x] = Color.argb(a.toInt(),r.toInt(),g.toInt(),b.toInt())
+            colorLimit((Color.red(pixels[x]) * filterMatrix[6]) + (Color.green(pixels[x]) * filterMatrix[7]) + (Color.blue(pixels[x]) * filterMatrix[8]));
+        pixels[x] = Color.rgb(r,g,b)
     }
         // create result bitmap output
         result.setPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
@@ -133,73 +144,50 @@ private fun changeImg(bitmap: Bitmap) : Bitmap
 }
 
 fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
+//    return when(blindType) {
+//        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+//        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+//        ClassifyBlindness.RED_BLIND -> arrayOf(1.04871, -0.06124, -0.016149, 0.4999456,0.4018163,0.0670727,0.622638,-0.7142829,1.1090876)
+//        ClassifyBlindness.GREEN_BLIND -> arrayOf(1.207, -0.40164, 0.1923, 0.050346, 0.96232, -0.0024459, -0.1272146, 0.16927233, 0.9832832)
+//        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.1942258, 0.652747, 0.1484325, 0.2435959, 0.660768, 0.1364899, 0.201588, 0.6132569,0.21213619)
+//    }
     return when(blindType) {
-        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.RED_BLIND -> arrayOf(0.567, 0.433, 0.0, 0.0, 0.0, 0.558, 0.442, 0.0, 0.0, 0.0, 0.0, 0.242, 0.758, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.GREEN_BLIND -> arrayOf(0.625, 0.375, 0.0, 0.0, 0.0, 0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.3, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
-        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.UNCLASSIFIED -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.NORMAL -> arrayOf(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+        ClassifyBlindness.RED_BLIND -> arrayOf(1.048, -0.061, -0.016, 0.499,0.401,0.067,0.622,-0.714,1.109)
+        ClassifyBlindness.GREEN_BLIND -> arrayOf(1.207, -0.401, 0.192, 0.050, 0.962, -0.002, -0.127, 0.169, 0.983)
+        ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.194, 0.652, 0.148, 0.243, 0.660, 0.136, 0.201, 0.613,0.212)
     }
-
-
-private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
-{
-    val result = Bitmap.createBitmap(w, h, bitmap.config)
-    val pixels = IntArray(w * h)
-    //get pixels
-    bitmap.getPixels(pixels, 0, w, 0, 0, w, h)
-    for (x in pixels.indices)
-        if(Color.green(pixels[x]) >200 && Color.red(pixels[x]) > 200 && Color.blue(pixels[x]) >200)
-            pixels[x] = Color.BLACK
-    // create result bitmap output
-    result.setPixels(pixels, 0, w, 0, 0, w, h)
-    return result
 }
-
 public fun getEditedImg(
     bitmap: Bitmap,
     w: Int,
     h: Int,
     cameraPreview: ImageView?,
-    editCameraPreview: ImageView
+    editCameraPreview: ImageView,
+    context: Context
 )
 {
-
-
     cameraPreview?.setImageBitmap(bitmap)
-    editCameraPreview.setImageBitmap(changeImg(bitmap))
+    editCameraPreview.setImageBitmap(changeImg(bitmap,getBlindType(context)))
 }
 
-fun getUserData(context: Context){
-    val userName = getUserName(context)
-    var blindType: ClassifyBlindness = ClassifyBlindness.NORMAL
-    val rootRef = FirebaseFirestore.getInstance()
-    rootRef.collection("users").document(userName!!).get()
-            .addOnSuccessListener { documentSnapshot ->
-               CurrentUser(documentSnapshot.toObject(UserModel::class.java)!!)
-            }.addOnFailureListener{
-
-            }
+fun getBlindType(context: Context): ClassifyBlindness {
+    val sp = context.getSharedPreferences("blindTypeInfo", MODE_PRIVATE)
+    val blindTypeText = sp.getString("blindType","UNCLASSIFIED")!!
+    val blindType = when (blindTypeText) {
+        "RED_BLIND" -> ClassifyBlindness.RED_BLIND
+        "NORMAL" -> ClassifyBlindness.NORMAL
+        "GREEN_BLIND" -> ClassifyBlindness.GREEN_BLIND
+        "BLACK_WHITE_BLIND" -> ClassifyBlindness.BLACK_WHITE_BLIND
+        "UNCLASSIFIED" -> ClassifyBlindness.UNCLASSIFIED
+        else -> ClassifyBlindness.UNCLASSIFIED
+    }
+    return blindType
 }
 public fun saveImgInStorage(bitmap: Bitmap, context: Context)
 {
-    val resultBitmap = changeImg(bitmap)
-=======
-    editCameraPreview.setImageBitmap(changeImg(bitmap, w, h))
-}
-
-public fun saveImgInStoarge(bitmap: Bitmap, context: Context)
-{
-    val resultBitmap = changeImg(bitmap, bitmap.width, bitmap.height)
->>>>>>> parent of e64bd7c (minor changes)
-=======
-    editCameraPreview.setImageBitmap(changeImg(bitmap, w, h))
-}
-
-public fun saveImgInStoarge(bitmap: Bitmap, context: Context)
-{
-    val resultBitmap = changeImg(bitmap, bitmap.width, bitmap.height)
->>>>>>> parent of e64bd7c (minor changes)
+    val resultBitmap = changeImg(bitmap,getBlindType(context))
     val root  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).toString()+File.separator +"blindColorApp"
     File(root).mkdirs()
     val myDir =File(root)
@@ -235,15 +223,7 @@ public fun viewImg (context: Context, storageRef: StorageReference, fileName:Str
         val localFile = File.createTempFile("Images", "bmp");
         ref.getFile(localFile).addOnSuccessListener {
             val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-<<<<<<< HEAD
-<<<<<<< HEAD
-            imageView.setImageBitmap(changeImg(bitmap))
-=======
-            imageView.setImageBitmap(changeImg(bitmap,bitmap.width,bitmap.height))
->>>>>>> parent of e64bd7c (minor changes)
-=======
-            imageView.setImageBitmap(changeImg(bitmap,bitmap.width,bitmap.height))
->>>>>>> parent of e64bd7c (minor changes)
+            imageView.setImageBitmap(changeImg(bitmap,getBlindType(context)))
         }.addOnFailureListener {
             val account = GoogleSignIn.getLastSignedInAccount(context)
             if(account!=null)
@@ -264,7 +244,7 @@ public fun getfileNameList(userName: String, gridView: GridView?,context:Context
     val listRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
     val  fileNameList: ArrayList<String> = ArrayList<String>()
     listRef.listAll()
-        .addOnSuccessListener {
+        .addOnSuccessListener { it ->
             it.items.forEach{
                 fileNameList.add(it.name)
             }

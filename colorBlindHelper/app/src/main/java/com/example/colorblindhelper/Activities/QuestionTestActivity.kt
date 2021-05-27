@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.example.colorblindhelper.ClassifyBlindness
 import com.example.colorblindhelper.R
 import com.example.colorblindhelper.getUserName
+import com.example.colorblindhelper.updateBlindType
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -307,6 +308,7 @@ class QuestionTestActivity : AppCompatActivity() {
 
                     // show result dialog:
                     updateClassificationOnFirebase(classification)
+                    updateBlindType(classification,this)
                     showDialog(classification)
 
 

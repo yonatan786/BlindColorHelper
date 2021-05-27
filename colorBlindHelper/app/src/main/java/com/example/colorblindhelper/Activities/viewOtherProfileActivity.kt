@@ -70,7 +70,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         val db = Firebase.firestore
         val request = RequestFriendship(
             Status.WAITING,
-            getUserName(applicationContext)!!, userName!!
+            getUserName(applicationContext)!!, userName!!,
         )
         db.collection("requests").document(userName!!).collection("newRequests").document(
             getUserName(applicationContext)!!).set(request)
@@ -91,8 +91,8 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 if(snapshot?.exists() == true)
                 {
                     when(snapshot.get("status")){
-                        "WAITING" -> changeButtonStatus("waiting...")
-                        "FRIENDS" -> changeButtonStatus("friends")
+                        "WAITING" -> changeButtonStatus("Waiting...")
+                        "FRIENDS" -> changeButtonStatus("Friends")
                     }
                 }
         }
@@ -113,12 +113,12 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         findViewById<Button>(R.id.btnReject).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
             RejectFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
-            changeButtonStatus("ask to be a friends")
+            changeButtonStatus("Ask to be a friends")
         }
         findViewById<Button>(R.id.btnAccept).setOnClickListener{
             findViewById<LinearLayout>(R.id.layoutRequest)?.visibility = View.GONE
             AcceptFriendRequest(applicationContext,userName, getUserName(applicationContext)!!)
-            changeButtonStatus("friends")
+            changeButtonStatus("Friends")
         }
     }
 

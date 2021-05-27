@@ -3,10 +3,10 @@ package com.example.colorblindhelper
 import com.google.firebase.database.Exclude
 import java.util.*
 enum class ClassifyBlindness{NORMAL,RED_BLIND,GREEN_BLIND,UNCLASSIFIED,BLACK_WHITE_BLIND}
-class UserModel(private val userName:String, private val isGlasses: Boolean, private val gender: Gender?, private val birthDate: String, private val typeBlind:ClassifyBlindness?){
+class UserModel(private val userName:String, private val isGlasses: Boolean, private val gender: Gender?, private val birthDate: String, private var typeBlind:ClassifyBlindness = ClassifyBlindness.UNCLASSIFIED){
 
 
-    constructor() : this("", true,null, "",null)
+    constructor() : this("", true,null, "")
 
     public fun getUserName():String{
         return userName
@@ -21,7 +21,9 @@ class UserModel(private val userName:String, private val isGlasses: Boolean, pri
         return birthDate
     }
     public fun getBlindType(): ClassifyBlindness {
-        return typeBlind!!
+        return typeBlind
     }
-
+    public fun setType(type:ClassifyBlindness) {
+        typeBlind = type
+    }
 }

@@ -14,7 +14,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.example.colorblindhelper.getEditedImg
-import com.example.colorblindhelper.saveImgInStoarge
+import com.example.colorblindhelper.saveImgInStorage
 import com.example.colorblindhelper.uploadPictureToFirebaseStorage
 import com.example.colorblindhelper.uploadType
 import com.google.android.gms.vision.CameraSource
@@ -68,7 +68,7 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
     }
 
     fun saveImageToStorage() {
-        saveImgInStoarge(bitmap!!,activity!!)
+        saveImgInStorage(bitmap!!,activity!!)
     }
     fun uploadImageToFirebase(type: uploadType) {
         uploadPictureToFirebaseStorage(activity!!,bitmap,null,type)
@@ -92,7 +92,9 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
 
             val jpegArray = baos.toByteArray()
              bitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.size)
-            activity?.runOnUiThread(Runnable{ getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!) })
+            activity?.runOnUiThread(Runnable{ getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!,
+                activity!!
+            ) })
 
             return null
 
