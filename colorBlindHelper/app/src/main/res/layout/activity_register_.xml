@@ -22,7 +22,30 @@
             android:id="@+id/tvNoRequest"
             android:textSize="30dp"
             android:text="User Details"/>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#232F34"
+            android:textStyle="bold"
+            android:text="Full Name"
+            android:textSize="20dp"
+            />
+        <EditText
+            android:id="@+id/etFullName"
+            android:paddingLeft="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+        </LinearLayout>
     <RadioGroup
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
@@ -60,7 +83,8 @@
             android:textSize="20dp" />
     </RadioGroup>
 
-    <RadioGroup
+
+        <RadioGroup
         android:layout_marginTop="20dp"
         android:layout_marginLeft="30dp"
         android:layout_width="wrap_content"
@@ -120,6 +144,7 @@
             android:spinnersShown="true"
             />
     </LinearLayout>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

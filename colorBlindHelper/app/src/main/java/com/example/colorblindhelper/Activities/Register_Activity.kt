@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.colorblindhelper.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
@@ -18,6 +19,7 @@ val RC_TEST = 100
 class Register_Activity : AppCompatActivity(), View.OnClickListener {
     val requestType = arrayOf(RequestType.SIGN_IN, RequestType.UPDATE)
     private var requestIntentFlag : RequestType? = null
+    private var etFullName : EditText? = null
     private var btnNext: Button? = null
     private var radioIsGlasses: RadioGroup? = null
     private var radioGender: RadioGroup? = null
@@ -30,16 +32,17 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         datePicker = findViewById(R.id.datePicker)
         radioIsGlasses = findViewById(R.id.radioIsGlasses)
         radioGender = findViewById(R.id.radioGender)
+        etFullName = findViewById(R.id.etFullName)
         btnNext!!.setOnClickListener(this)
         val i = intent.getIntExtra("requestCode",-1)
         requestIntentFlag = requestType[i]
         getUserDetails()
     }
 
-    private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?) {
+    private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?,fullNameText:String?) {
         radioGender?.check( if(gender == Gender.MALE){R.id.radioMale}else{R.id.radioFemale} )
         radioIsGlasses?.check(if(isGlasses==true){R.id.radioGlassesYes}else{R.id.radioGlassesYes})
-
+        etFullName?.setText(fullNameText)
     }
 
     private fun getUserDetails() {
@@ -48,9 +51,14 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         rootRef.collection("users").document(username!!).get()
             .addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject(UserModel::class.java)
-                updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses())
+                updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses(),user?.getFullName())
+            }.addOnFailureListener{
+                val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
+                updateAllFields(null,null,null,account?.givenName + account?.familyName
+                )
             }
     }
+
 
     override fun onClick(v: View?) {
         if (v == btnNext) {
@@ -60,6 +68,11 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
 
     private fun nextRegisterStage()
     {
+        val fullNameText = etFullName?.text.toString()
+        if( fullNameText == "")
+        {
+            etFullName?.setText("You must write a name")
+        }
         findViewById<RadioButton>(R.id.radioGlassesNo).error = null
         findViewById<RadioButton>(R.id.radioFemale).error= null
         val isGlasses = getIsGlasses(radioIsGlasses!!.checkedRadioButtonId,
@@ -70,8 +83,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         if(isGlasses == null || gender == null)
             return
         val birthDate = getDate(datePicker!!).toString()
-            uploadDataToFirebase(applicationContext,isGlasses,gender,birthDate)
-
+            uploadDataToFirebase(applicationContext,isGlasses,gender,birthDate,fullNameText)
             if(requestIntentFlag!! == RequestType.UPDATE) {
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_OK, returnIntent);

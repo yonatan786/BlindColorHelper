@@ -50,11 +50,11 @@ fun updateBlindType(blindTypeText:String,activity: Activity) {
     editor.putString("blindType", blindTypeText);
     editor.apply()
 }
-fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, birthDate: String) {
+fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, birthDate: String,fullName:String) {
 
     val db = Firebase.firestore
     val userName = getUserName(context) ?: return
-    val user = UserModel(userName,isGlasses,gender,birthDate)
+    val user = UserModel(userName,isGlasses,gender,birthDate,fullName)
     db.collection("users").document(getUserName(context)!!).set(user)
         .addOnSuccessListener { documentReference ->
             Toast.makeText(context,"The details are saved",Toast.LENGTH_SHORT).show()
