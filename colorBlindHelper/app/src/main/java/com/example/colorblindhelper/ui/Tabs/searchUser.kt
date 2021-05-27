@@ -66,7 +66,7 @@ class searchUser : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val searchView = view?.findViewById<SearchView>(R.id.searchView)
         rvUsersList = view?.findViewById(R.id.rvUsersList)
-
+        showFeedGridView(view?.findViewById(R.id.gridView),requireContext(),requireActivity())
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 firebaseSearch(query)

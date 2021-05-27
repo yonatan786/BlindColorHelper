@@ -6,16 +6,13 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.example.colorblindhelper.viewImg
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 
 public class ImageRecyclerAdapter(
     private val context: Context,
-    private val fileNameList: ArrayList<String> = ArrayList<String>(),
-    userName: String?
+    private val filePath: ArrayList<String> = ArrayList<String>(),
+
 ) : BaseAdapter()
 {
-    private val storageRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/"+ userName)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var imgView: ImageView? = null
@@ -31,12 +28,13 @@ public class ImageRecyclerAdapter(
         else {
             imgView = convertView as ImageView
         }
-        viewImg (context,storageRef,fileNameList[position],imgView)
+        viewImg (context,filePath[position],imgView)
         return imgView
     }
 
     override fun getItem(position: Int): Any {
-        return fileNameList[position]
+        //TODO()
+        return filePath[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -44,7 +42,7 @@ public class ImageRecyclerAdapter(
     }
 
     override fun getCount(): Int {
-        return fileNameList.size
+        return filePath.size
     }
 
 }

@@ -21,7 +21,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_profile)
         userName = intent.getStringExtra("userNameProfile")
-        getfileNameList(userName!!,findViewById<GridView>(R.id.gradeView),
+        showProfileGridView(userName!!,findViewById<GridView>(R.id.gradeView),
             applicationContext,this)
         findViewById<TextView>(R.id.tvUserName)?.text = userName
         findViewById<TextView>(R.id.tvChangeProfilePhoto).visibility = View.GONE
@@ -35,7 +35,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val item = parent?.getItemAtPosition(position)
+        val item = parent?.getItemAtPosition(position).toString().split("/")[-1]
         showDialog(position, item as String?,this,this,userName!!)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

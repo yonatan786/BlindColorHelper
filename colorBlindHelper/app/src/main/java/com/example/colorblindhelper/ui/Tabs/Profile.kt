@@ -34,7 +34,7 @@ class Profile : Fragment(), AdapterView.OnItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val userName = getUserName(requireContext())
-        getfileNameList(userName!!,view?.findViewById<GridView>(R.id.gradeView),requireContext(),requireActivity())
+        showProfileGridView(userName!!,view?.findViewById<GridView>(R.id.gradeView),requireContext(),requireActivity())
         view?.findViewById<TextView>(R.id.tvUserName)?.text = getUserName(requireContext())
         view?.findViewById<GridView>(R.id.gradeView)?.onItemClickListener = this
         ImgViewProfile = view?.findViewById<ImageView>(R.id.ImgViewProfile)
@@ -86,8 +86,8 @@ class Profile : Fragment(), AdapterView.OnItemClickListener {
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val item = parent?.getItemAtPosition(position)
-        showDialog(position, item as String?,requireContext(),requireActivity(),
+        val item = parent?.getItemAtPosition(position).toString().split("/")
+        showDialog(position, item[item.size -1],requireContext(),requireActivity(),
             getUserName(requireContext())!!
         )
     }

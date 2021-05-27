@@ -36,7 +36,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         tvSend = findViewById(R.id.tvSend)
         etComment = findViewById(R.id.etComment)
         val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
-        viewImg(applicationContext,storageRef, fileName!!,findViewById<ImageView>(R.id.imgViewPost))
+        viewImg(applicationContext, "images/posts/$userName/$fileName",findViewById<ImageView>(R.id.imgViewPost))
         findViewById<LinearLayout>(R.id.dialogLayer).visibility = View.GONE
         findViewById<LinearLayout>(R.id.layoutComment).visibility = View.VISIBLE
         rvCommentsList = findViewById<RecyclerView>(R.id.rvCommentsList)

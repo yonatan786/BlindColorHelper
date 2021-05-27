@@ -64,12 +64,11 @@ fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, bi
 }
 public fun showDialog(pos: Int, item: String?,context:Context,activity: Activity,userName: String)
 {
-    val storageRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/"+ userName)
 
     val dialog : Dialog = Dialog(context)
     dialog.setContentView(R.layout.activity_view_image)
     if (item != null) {
-        viewImg(dialog.context,storageRef,item,dialog.findViewById<ImageView>(R.id.imgViewPost))
+        viewImg(dialog.context, "images/posts/$userName/$item",dialog.findViewById<ImageView>(R.id.imgViewPost))
     }
     dialog.findViewById<EditText>(R.id.etComment).visibility = View.GONE
     dialog.findViewById<TextView>(R.id.tvSend).visibility = View.GONE
@@ -213,9 +212,9 @@ private fun generateNewFileName(): String {
     }
     return  "editedImg"+currentDateTime+".jpg";
 }
-public fun viewImg (context: Context, storageRef: StorageReference, fileName:String, imageView: ImageView)
+public fun viewImg (context: Context, fileName:String, imageView: ImageView)
 {
-    val ref = storageRef.child(fileName);
+    val ref = FirebaseStorage.getInstance().getReference(fileName)
     try {
         val localFile = File.createTempFile("Images", "bmp");
         ref.getFile(localFile).addOnSuccessListener {
@@ -233,25 +232,32 @@ public fun viewImg (context: Context, storageRef: StorageReference, fileName:Str
 
 public fun downloadImgViewProfile (context: Context,userName:String,imageView: ImageView)
 {
-    val storageRef: StorageReference = FirebaseStorage.getInstance().getReference()
-    var  riversRef =  storageRef.child("images/profiles" )
-    viewImg (context, riversRef, userName, imageView)
+    viewImg (context, "images/profiles/$userName", imageView)
 }
-public fun getfileNameList(userName: String, gridView: GridView?,context:Context,activity:Activity) {
+public fun showProfileGridView(userName: String, gridView: GridView?, context:Context, activity:Activity) {
     val listRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
     val  fileNameList: ArrayList<String> = ArrayList<String>()
     listRef.listAll()
         .addOnSuccessListener { it ->
             it.items.forEach{
-                fileNameList.add(it.name)
+                fileNameList.add("images/posts/$userName"+"/"+it.name)
             }
-            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList,userName)
+            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
         }
 
 }
-fun showFeed()
+fun showFeedGridView(gridView: GridView?, context:Context, activity:Activity)
 {
-    
+    val  fileNameList: ArrayList<String> = ArrayList<String>()
+    val query = FirebaseFirestore.getInstance().collection("feed").document(getUserName(context)!!).collection("newPhotos")
+        .orderBy("timeStamp").get()
+    query.addOnSuccessListener { documents ->
+        for (document in documents) {
+            fileNameList.add("images/posts/"+document.get("userName") +"/"+document.get("imgName"))
+        }
+    }
+    gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+
 }
 public fun getUserName(context: Context): String? {
     val account = GoogleSignIn.getLastSignedInAccount(context)
