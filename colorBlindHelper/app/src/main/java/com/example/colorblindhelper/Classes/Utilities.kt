@@ -1,3 +1,5 @@
+@file:Suppress("UNREACHABLE_CODE")
+
 package com.example.colorblindhelper
 import android.Manifest
 import android.app.Activity
@@ -90,8 +92,7 @@ fun checkReadWritePermissions(activity: Activity, context: Context): Boolean {
     }
     return false
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 //private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 //{
 //    val result = Bitmap.createBitmap(w, h, bitmap.config)
@@ -140,12 +141,9 @@ fun getFilterMatrix(blindType: ClassifyBlindness): Array<Double> {
         ClassifyBlindness.BLACK_WHITE_BLIND -> arrayOf(0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.299, 0.587, 0.114, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0)
     }
 
-    private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
-{
-=======
+
 private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
 {
->>>>>>> parent of e64bd7c (minor changes)
     val result = Bitmap.createBitmap(w, h, bitmap.config)
     val pixels = IntArray(w * h)
     //get pixels
@@ -157,6 +155,7 @@ private fun changeImg(bitmap: Bitmap, w: Int, h: Int) : Bitmap
     result.setPixels(pixels, 0, w, 0, 0, w, h)
     return result
 }
+
 public fun getEditedImg(
     bitmap: Bitmap,
     w: Int,
@@ -168,7 +167,6 @@ public fun getEditedImg(
 
 
     cameraPreview?.setImageBitmap(bitmap)
-<<<<<<< HEAD
     editCameraPreview.setImageBitmap(changeImg(bitmap))
 }
 
