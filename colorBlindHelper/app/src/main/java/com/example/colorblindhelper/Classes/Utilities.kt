@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.colorblindhelper.Activities.ViewImage
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
+import com.example.colorblindhelper.Classes.PictureModel
 import com.example.colorblindhelper.Classes.imgModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
@@ -230,20 +231,22 @@ public fun viewImg (context: Context, fileName:String, imageView: ImageView)
     }
 }
 
-public fun downloadImgViewProfile (context: Context,userName:String,imageView: ImageView)
+fun downloadImgViewProfile (context: Context,userName:String,imageView: ImageView)
 {
     viewImg (context, "images/profiles/$userName", imageView)
 }
-public fun showProfileGridView(userName: String, gridView: GridView?, context:Context, activity:Activity) {
-    val listRef : StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
+fun showProfileGridView(userName: String, gridView: GridView?, context:Context, activity:Activity) {
     val  fileNameList: ArrayList<String> = ArrayList<String>()
-    listRef.listAll()
-        .addOnSuccessListener { it ->
-            it.items.forEach{
-                fileNameList.add("images/posts/$userName"+"/"+it.name)
-            }
-            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+    val query = FirebaseFirestore.getInstance().collection("photosNames").document(userName).collection("photos").orderBy("timeStamp").get()
+    query.addOnSuccessListener { documents ->
+        for (document in documents) {
+            fileNameList.add("images/posts/$userName"+"/"+document.get("imgName"))
         }
+    }.addOnSuccessListener {
+            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+        }.addOnFailureListener {
+            val a = 0
+    }
 
 }
 fun showFeedGridView(gridView: GridView?, context:Context, activity:Activity)
@@ -293,9 +296,16 @@ public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri:
         Toast.makeText(context,"The image was uploaded",Toast.LENGTH_LONG).show()
         if(type == uploadType.POST)
         {
+            uploadPictureNameToDB(context,imgName)
             updateFriendFeed(getUserName(context)!!,imgName)
         }
     })
+}
+
+private fun uploadPictureNameToDB(context: Context,imgName:String) {
+    val db = Firebase.firestore
+    val userName = getUserName(context) ?: return
+    db.collection("photosNames").document(userName).collection("photos").add(PictureModel(userName,imgName))
 }
 
 fun updateFriendFeed(userName: String,imgName:String) {
