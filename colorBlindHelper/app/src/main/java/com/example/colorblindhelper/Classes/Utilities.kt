@@ -4,10 +4,10 @@ package com.example.colorblindhelper
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -19,23 +19,20 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.colorblindhelper.Activities.MainActivity
-import com.example.colorblindhelper.Activities.RC_REGISTER
-import com.example.colorblindhelper.Activities.Register_Activity
 import com.example.colorblindhelper.Activities.ViewImage
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
+import com.example.colorblindhelper.Classes.imgModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Transaction
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import kotlinx.coroutines.awaitAll
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -252,6 +249,10 @@ public fun getfileNameList(userName: String, gridView: GridView?,context:Context
         }
 
 }
+fun showFeed()
+{
+    
+}
 public fun getUserName(context: Context): String? {
     val account = GoogleSignIn.getLastSignedInAccount(context)
     return account?.email?.dropLastWhile { it != '@' }?.dropLast(1)
@@ -261,10 +262,11 @@ enum class uploadType{POST,PROFILE}
 public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri: Uri?,type :uploadType ) {
     val storage: FirebaseStorage = FirebaseStorage.getInstance()
     val storageRef: StorageReference = storage.getReference()
+    val imgName = generateNewFileName()
     var riversRef : StorageReference? = null
     if(type == uploadType.POST) {
         riversRef =
-                storageRef.child("images/posts/" + getUserName(context) + "/" + generateNewFileName())
+                storageRef.child("images/posts/" + getUserName(context) + "/" + imgName)
     }
     else
     {
@@ -283,7 +285,41 @@ public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri:
         Toast.makeText(context,"The image wasn't uploaded. Try again later!",Toast.LENGTH_LONG).show()
     })?.addOnSuccessListener(OnSuccessListener<Any?> {
         Toast.makeText(context,"The image was uploaded",Toast.LENGTH_LONG).show()
+        if(type == uploadType.POST)
+        {
+            updateFriendFeed(getUserName(context)!!,imgName)
+        }
     })
+}
+
+fun updateFriendFeed(userName: String,imgName:String) {
+    val usersList = ArrayList<String>()
+    val query = FirebaseFirestore.getInstance().collection("requests/$userName/newRequests")
+            .whereEqualTo("status", "FRIENDS").get()
+    query.addOnSuccessListener { documents ->
+        for (document in documents) {
+            if(document.get("userGet") == userName)
+            {
+                usersList.add(document.get("userSend").toString())
+            }
+            else{
+                usersList.add(document.get("userGet").toString())
+            }
+        }
+        Firebase.firestore.runTransaction { transaction ->
+            for(user in usersList)
+            {
+                val sfDocRef = Firebase.firestore.collection("feed").document(user).collection("newPhotos")
+                sfDocRef.add(imgModel(imgName,userName))
+            }
+
+            // Success
+            null
+        }.addOnSuccessListener {
+            Log.d(TAG, "Transaction success!") }
+            .addOnFailureListener {
+                    e -> Log.w(TAG, "Transaction failure.", e) }
+    }
 }
 private fun uploadFromUri(uri: Uri, storageRef: StorageReference, type: uploadType): UploadTask {
     if(type == uploadType.POST) {
