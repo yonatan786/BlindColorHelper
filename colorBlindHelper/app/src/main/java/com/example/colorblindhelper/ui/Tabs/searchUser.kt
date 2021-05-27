@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,13 +32,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [searchUser.newInstance] factory method to
  * create an instance of this fragment.
  */
-class searchUser : Fragment() {
+class searchUser : Fragment(), AdapterView.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private var rvUsersList : RecyclerView? = null
-    var adapter : FirestoreRecyclerAdapter<UserModel, ViewHolder>? = null
-    var mAuth : FirebaseAuth? = null
+    private var rvUsersList: RecyclerView? = null
+    private var gridView: GridView? = null
+    var adapter: FirestoreRecyclerAdapter<UserModel, ViewHolder>? = null
+    var mAuth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,7 +51,8 @@ class searchUser : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        showFriendsList()
+        firebaseSearch("")
+
 
     }
 
@@ -59,14 +64,16 @@ class searchUser : Fragment() {
         // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.fragment_search_user, container, false)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val searchView = view?.findViewById<SearchView>(R.id.searchView)
         rvUsersList = view?.findViewById(R.id.rvUsersList)
-        showFeedGridView(view?.findViewById(R.id.gridView),requireContext(),requireActivity())
+        gridView = view?.findViewById<GridView>(R.id.gridView)
+        gridView?.setOnItemClickListener(this)
+        firebaseSearch("")
+
         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 firebaseSearch(query)
@@ -79,6 +86,7 @@ class searchUser : Fragment() {
             }
         });
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -98,27 +106,44 @@ class searchUser : Fragment() {
                 }
             }
     }
+
     private fun firebaseSearch(searchText: String?) {
-        if (searchText == "")
-            showFriendsList()
-        val query  = FirebaseFirestore.getInstance().collection("users").whereNotEqualTo("userName",
-            getUserName(requireContext())).orderBy("userName").startAt(searchText).endAt(searchText+"\uf8ff")
+        if (searchText == "") {
+            gridView?.visibility = View.VISIBLE
+            rvUsersList?.visibility = View.GONE
+            showFeedGridView(gridView,requireContext(),requireActivity())
+            return
+        }
+        rvUsersList?.visibility = View.VISIBLE
+        gridView?.visibility = View.GONE
+        val query = FirebaseFirestore.getInstance().collection("users").whereNotEqualTo(
+            "userName",
+            getUserName(requireContext())
+        ).orderBy("userName").startAt(searchText).endAt(searchText + "\uf8ff")
         val options = FirestoreRecyclerOptions.Builder<UserModel>()
-            .setQuery(query,UserModel::class.java)
+            .setQuery(query, UserModel::class.java)
             .setLifecycleOwner(this)
             .build()
         adapter = object : FirestoreRecyclerAdapter<UserModel, ViewHolder>(options) {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                return ViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.search_row, parent, false))
+                return ViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.search_row, parent, false)
+                )
             }
 
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: UserModel) {
                 holder.tvUserName?.text = model.getUserName()
-                context?.let { downloadImgViewProfile(it,model.getUserName(),holder.imgViewProfile!!) }
+                context?.let {
+                    downloadImgViewProfile(
+                        it,
+                        model.getUserName(),
+                        holder.imgViewProfile!!
+                    )
+                }
                 holder.itemView.setOnClickListener {
                     val intent = Intent(context, viewOtherProfileActivity::class.java)
-                    intent.putExtra("userNameProfile",model.getUserName())
+                    intent.putExtra("userNameProfile", model.getUserName())
                     startActivity(intent)
                 }
             }
@@ -128,40 +153,17 @@ class searchUser : Fragment() {
     }
 
 
-    private fun showFriendsList() {
-        val query = FirebaseFirestore.getInstance().collection("requests/"+getUserName(requireContext())+"/newRequests")
-            .whereEqualTo("status", "FRIENDS")
-        val options = FirestoreRecyclerOptions.Builder<RequestFriendship>()
-            .setQuery(query, RequestFriendship::class.java)
-            .setLifecycleOwner(this)
-            .build()
-        val adapter = object : FirestoreRecyclerAdapter<RequestFriendship, ViewHolder>(options) {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                return ViewHolder(LayoutInflater.from(parent.context)
-                    .inflate(R.layout.search_row, parent, false))
-            }
 
-            override fun onBindViewHolder(holder: ViewHolder, position: Int, model: RequestFriendship) {
-                val userName = if (model.userSend == getUserName(requireContext())) {
-                    model.userGet
-                } else {
-                    model.userSend
-                }
-                holder.tvUserName?.text = userName
-                context?.let { downloadImgViewProfile(it,userName,holder.imgViewProfile!!) }
-                holder.itemView.setOnClickListener {
-                    val intent = Intent(context, viewOtherProfileActivity::class.java)
-                    intent.putExtra("userNameProfile",userName)
-                    startActivity(intent)
-                }
-            }
-        }
-        rvUsersList?.setLayoutManager(LinearLayoutManager(activity));
-        rvUsersList?.adapter = adapter
+
+
+    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val item = parent?.getItemAtPosition(position).toString().split("/")
+        showDialog(
+            position, item[item.size - 1], requireContext(), requireActivity(),
+            item[item.size - 2]
+        )
     }
-
 }
-
 class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 

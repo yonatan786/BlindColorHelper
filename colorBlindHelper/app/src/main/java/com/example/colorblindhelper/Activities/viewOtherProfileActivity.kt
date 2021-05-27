@@ -35,8 +35,8 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
     }
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        val item = parent?.getItemAtPosition(position).toString().split("/")[-1]
-        showDialog(position, item as String?,this,this,userName!!)
+        val item = parent?.getItemAtPosition(position).toString().split("/")
+        showDialog(position, item[item.size-1],this,this,userName!!)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater

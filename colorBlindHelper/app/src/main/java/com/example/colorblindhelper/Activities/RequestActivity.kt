@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.colorblindhelper.*
+import com.example.colorblindhelper.ui.Tabs.ViewHolder
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,10 +17,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class RequestActivity : AppCompatActivity() {
     var rvRequestsList : RecyclerView? = null
+    var rvUsersList : RecyclerView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_request)
         rvRequestsList = findViewById(R.id.rvRequestsList)
+        rvUsersList = findViewById(R.id.rvFriendList)
+        showFriendsList()
         firebaseRequestList()
     }
 
@@ -88,7 +92,46 @@ class RequestActivity : AppCompatActivity() {
         finish()
         return true
     }
+    private fun showFriendsList() {
+        val query = FirebaseFirestore.getInstance()
+            .collection("requests/" + getUserName(applicationContext) + "/newRequests")
+            .whereEqualTo("status", "FRIENDS")
+        val options = FirestoreRecyclerOptions.Builder<RequestFriendship>()
+            .setQuery(query, RequestFriendship::class.java)
+            .setLifecycleOwner(this)
+            .build()
+        val adapter = object : FirestoreRecyclerAdapter<RequestFriendship, ViewHolder>(options) {
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+                return ViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.search_row, parent, false)
+                )
+            }
+
+            override fun onBindViewHolder(
+                holder: ViewHolder,
+                position: Int,
+                model: RequestFriendship
+            ) {
+                val userName = if (model.userSend == getUserName(applicationContext)) {
+                    model.userGet
+                } else {
+                    model.userSend
+                }
+                holder.tvUserName?.text = userName
+                applicationContext?.let { downloadImgViewProfile(it, userName, holder.imgViewProfile!!) }
+                holder.itemView.setOnClickListener {
+                    val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
+                    intent.putExtra("userNameProfile", userName)
+                    startActivity(intent)
+                }
+            }
+        }
+        rvUsersList?.setLayoutManager(LinearLayoutManager(this));
+        rvUsersList?.adapter = adapter
+    }
 }
+
 class ViewHolderRequest(view: View) : RecyclerView.ViewHolder(view) {
 
 
