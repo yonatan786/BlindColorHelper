@@ -20,6 +20,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -134,6 +136,11 @@ class searchUser : Fragment(), AdapterView.OnItemClickListener {
 
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: UserModel) {
                 holder.tvUserName?.text = model.getUserName()
+                holder.tvFullName?.text = model.getFullName()
+                holder.tvStatus?.text = "Not Friends"
+                holder.tvStatus?.let {
+                    getStatusText(model.getUserName(), getUserName(requireContext())!!, it)
+                }
                 context?.let {
                     downloadImgViewProfile(
                         it,
@@ -152,8 +159,27 @@ class searchUser : Fragment(), AdapterView.OnItemClickListener {
         rvUsersList?.adapter = adapter
     }
 
+    private fun getStatusText(userName: String, currentUserName: String,tvStatus:TextView){
+        Firebase.firestore.collection("requests").document(userName).collection("newRequests").document(currentUserName)
+            .addSnapshotListener { snapshot, e ->
+                if (snapshot?.exists() == true) {
+                    if (snapshot["status"] == "WAITING") {
+                        tvStatus.text = "Waiting"
+                    } else if (snapshot["status"] == "FRIENDS")
+                    {
+                        tvStatus.text = "Friends"
 
+                    }
+                }
 
+            }
+        Firebase.firestore.collection("requests").document(currentUserName).collection("newRequests").document(userName)
+            .addSnapshotListener{ snapshot, e ->
+                if (snapshot?.exists() == true && snapshot["status"] == "WAITING") {
+                    tvStatus.text="Requested Sent"
+                }
+            }
+    }
 
 
     override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -168,10 +194,13 @@ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
     public var tvUserName : TextView? = null
+    public var tvFullName : TextView? = null
+    public var tvStatus : TextView? = null
     public var imgViewProfile: ImageView? = null
     init{
         tvUserName = view.findViewById(R.id.tvUserName)
         imgViewProfile = view.findViewById(R.id.ImgViewProfile)
-
+        tvFullName = view.findViewById(R.id.tvFullName)
+        tvStatus = view.findViewById(R.id.tvStatus)
     }
 }

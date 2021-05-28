@@ -51,7 +51,13 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         rootRef.collection("users").document(username!!).get()
             .addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject(UserModel::class.java)
-                updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses(),user?.getFullName())
+                if(user != null)
+                    updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses(),user?.getFullName())
+                else{
+                    val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
+                    updateAllFields(null,null,null,account?.givenName +" "+ account?.familyName
+                    )
+                }
             }.addOnFailureListener{
                 val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
                 updateAllFields(null,null,null,account?.givenName + account?.familyName
@@ -71,7 +77,8 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val fullNameText = etFullName?.text.toString()
         if( fullNameText == "")
         {
-            etFullName?.setText("You must write a name")
+            etFullName?.error = "You must write a name"
+            return
         }
         findViewById<RadioButton>(R.id.radioGlassesNo).error = null
         findViewById<RadioButton>(R.id.radioFemale).error= null

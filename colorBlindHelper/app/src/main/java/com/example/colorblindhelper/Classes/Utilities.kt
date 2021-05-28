@@ -34,6 +34,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import id.zelory.compressor.Compressor.compress
+import io.grpc.Compressor
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -276,6 +278,8 @@ public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri:
     if(type == uploadType.POST) {
         riversRef =
                 storageRef.child("images/posts/" + getUserName(context) + "/" + imgName)
+//        val compressedImageFile = id.zelory.compressor.Compressor.compress(context, bitmap)
+//        val bitmap = BitmapFactory.decodeFile(compressedImageFile.path)
     }
     else
     {

@@ -119,6 +119,8 @@ class RequestActivity : AppCompatActivity() {
                     model.userSend
                 }
                 holder.tvUserName?.text = userName
+                holder.tvFullName?.visibility = View.GONE
+                holder.tvStatus?.visibility = View.GONE
                 applicationContext?.let { downloadImgViewProfile(it, userName, holder.imgViewProfile!!) }
                 holder.itemView.setOnClickListener {
                     val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)

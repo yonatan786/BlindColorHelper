@@ -33,12 +33,37 @@
             app:strokeColor="#232F34"
             />
     </androidx.cardview.widget.CardView>
-    <TextView
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:gravity="left|center"
         android:layout_marginLeft="20dp"
+        android:orientation="vertical">
+    <TextView
         android:layout_height="wrap_content"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:textSize="15sp"
         android:textColor="#344955"
         android:text="Username"
         android:id="@+id/tvUserName"/>
+    <TextView
+        android:paddingTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="11sp"
+        android:textColor="#344955"
+        android:text="Full Name"
+        android:id="@+id/tvFullName"/>
+        <TextView
+            android:paddingTop="5dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textStyle="italic"
+            android:textSize="9sp"
+            android:textColor="#344955"
+            android:text="Status"
+            android:id="@+id/tvStatus"/>
+    </LinearLayout>
+
 </LinearLayout>
