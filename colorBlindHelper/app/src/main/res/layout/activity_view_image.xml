@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activities.ViewImage">
+    <TextView
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:textSize="15sp"
+        android:textColor="#344955"
+        android:layout_gravity="center"
+        android:text="Username"
+        android:visibility="gone"
+        android:id="@+id/uname"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"

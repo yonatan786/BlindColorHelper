@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import org.w3c.dom.Text
 
 class ViewImage : AppCompatActivity(), View.OnClickListener {
     private var fileName : String? = null
@@ -27,6 +28,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
     private var rvCommentsList: RecyclerView? = null
     private var tvSend: TextView? = null
     private var etComment: EditText? = null
+    private var uname: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +37,19 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         userName = intent.getStringExtra("username")
         tvSend = findViewById(R.id.tvSend)
         etComment = findViewById(R.id.etComment)
+        uname = findViewById(R.id.uname)
         val storageRef: StorageReference = FirebaseStorage.getInstance().reference.child("images/posts/$userName")
         viewImg(applicationContext, "images/posts/$userName/$fileName",findViewById<ImageView>(R.id.imgViewPost))
         findViewById<LinearLayout>(R.id.dialogLayer).visibility = View.GONE
         findViewById<LinearLayout>(R.id.layoutComment).visibility = View.VISIBLE
+        uname!!.visibility = View.VISIBLE
+        uname!!.text = "$userName"
+        uname!!.setOnClickListener(View.OnClickListener {
+            val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
+            intent.putExtra("userNameProfile", "$userName")
+            startActivity(intent)
+        })
+
         rvCommentsList = findViewById<RecyclerView>(R.id.rvCommentsList)
         tvSend?.setOnClickListener(this)
         firebaseUpdate()
