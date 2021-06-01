@@ -14,11 +14,13 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.scale
 import com.example.colorblindhelper.Activities.ViewImage
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.example.colorblindhelper.Classes.PictureModel
@@ -26,22 +28,17 @@ import com.example.colorblindhelper.Classes.imgModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Transaction
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import id.zelory.compressor.Compressor.compress
-import io.grpc.Compressor
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
-import kotlin.collections.ArrayList
 
 
 enum class Gender {
@@ -292,7 +289,9 @@ public fun uploadPictureToFirebaseStorage(context: Context, bitmap: Bitmap?,uri:
     }
     else if(uri != null)
     {
-        uploadTask = uploadFromUri(uri,riversRef,type)
+        val uri_to_bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        uploadTask = uploadFromBitmap(uri_to_bitmap, riversRef)
+        //uploadTask = uploadFromUri(uri,riversRef,type)
     }
     uploadTask?.addOnFailureListener(OnFailureListener {
         Toast.makeText(context,"The image wasn't uploaded. Try again later!",Toast.LENGTH_LONG).show()
@@ -350,7 +349,8 @@ private fun uploadFromUri(uri: Uri, storageRef: StorageReference, type: uploadTy
 }
 private fun uploadFromBitmap(bitmap: Bitmap, storageRef:StorageReference): UploadTask {
     val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+    //val scaled_bitmap = bitmap.scale(1200, 1000)
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos)
     val data: ByteArray = baos.toByteArray()
     return storageRef.putBytes(data)
 }
