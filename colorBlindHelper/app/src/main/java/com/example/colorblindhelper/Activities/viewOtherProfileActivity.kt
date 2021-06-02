@@ -22,7 +22,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         setContentView(R.layout.fragment_profile)
         userName = intent.getStringExtra("userNameProfile")
         showProfileGridView(userName!!,findViewById<GridView>(R.id.gradeView),
-            applicationContext,this)
+            applicationContext,this,findViewById<TextView>(R.id.tvNoPhotos),findViewById<Button>(R.id.btnUploadPhoto))
         findViewById<TextView>(R.id.tvUserName)?.text = userName
         findViewById<TextView>(R.id.tvChangeProfilePhoto).visibility = View.GONE
         findViewById<GridView>(R.id.gradeView)?.onItemClickListener = this

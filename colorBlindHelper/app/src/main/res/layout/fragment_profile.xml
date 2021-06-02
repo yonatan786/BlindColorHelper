@@ -128,4 +128,28 @@
         android:numColumns="auto_fit"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="#232F34"
+        android:padding="10dp"
+        android:id="@+id/tvNoPhotos"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:text="There isn't photos"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/btnUploadPhoto"
+        android:visibility="gone"
+        android:text="Upload photo"/>
+    </LinearLayout>
 </LinearLayout>

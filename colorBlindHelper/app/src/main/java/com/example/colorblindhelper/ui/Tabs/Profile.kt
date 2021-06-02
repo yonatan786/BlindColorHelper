@@ -34,7 +34,10 @@ class Profile : Fragment(), AdapterView.OnItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val userName = getUserName(requireContext())
-        showProfileGridView(userName!!,view?.findViewById<GridView>(R.id.gradeView),requireContext(),requireActivity())
+        view?.findViewById<TextView>(R.id.tvNoPhotos)?.let {
+            showProfileGridView(userName!!,view?.findViewById<GridView>(R.id.gradeView),requireContext(),requireActivity(),
+                it,view?.findViewById<Button>(R.id.btnUploadPhoto))
+        }
         view?.findViewById<TextView>(R.id.tvUserName)?.text = getUserName(requireContext())
         view?.findViewById<GridView>(R.id.gradeView)?.onItemClickListener = this
         ImgViewProfile = view?.findViewById<ImageView>(R.id.ImgViewProfile)

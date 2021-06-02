@@ -45,9 +45,11 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         uname!!.visibility = View.VISIBLE
         uname!!.text = "$userName"
         uname!!.setOnClickListener(View.OnClickListener {
-            val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
-            intent.putExtra("userNameProfile", "$userName")
-            startActivity(intent)
+            if(userName != getUserName(applicationContext)) {
+                val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
+                intent.putExtra("userNameProfile", "$userName")
+                startActivity(intent)
+            }
         })
 
         rvCommentsList = findViewById<RecyclerView>(R.id.rvCommentsList)

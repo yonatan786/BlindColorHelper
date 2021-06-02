@@ -15,10 +15,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setUpTabs()
+        val intent = getIntent()
+        val tab = intent.getIntExtra("tab",2)
+        setUpTabs(tab)
     }
 
-    private fun setUpTabs() {
+    private fun setUpTabs(tabNumber: Int) {
         val adapter = ViewPageAdapter(supportFragmentManager, 4)
         val viewPager = findViewById<ViewPager>(R.id.viewPager)
         viewPager.adapter = adapter
@@ -29,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         tabs.getTabAt(1)?.setIcon(R.drawable.ic_baseline_search_24)
         tabs.getTabAt(0)?.setIcon(R.drawable.ic_baseline_find_replace_24)
         val tabLayout = findViewById<TabLayout>(R.id.tabs)
-        val tab = tabLayout.getTabAt(2) // Count Starts From 0
+        val tab = tabLayout.getTabAt(tabNumber) // Count Starts From 0
         tab!!.select()
 
     }

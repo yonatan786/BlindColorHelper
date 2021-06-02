@@ -20,7 +20,8 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.scale
+import androidx.core.content.ContextCompat.startActivity
+import com.example.colorblindhelper.Activities.MainActivity
 import com.example.colorblindhelper.Activities.ViewImage
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter
 import com.example.colorblindhelper.Classes.PictureModel
@@ -29,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -234,15 +236,29 @@ fun downloadImgViewProfile (context: Context,userName:String,imageView: ImageVie
 {
     viewImg (context, "images/profiles/$userName", imageView)
 }
-fun showProfileGridView(userName: String, gridView: GridView?, context:Context, activity:Activity) {
+fun showProfileGridView(userName: String, gridView: GridView?, context:Context, activity:Activity,tvNoPhotos: TextView,btUploadPhoto : Button?) {
     val  fileNameList: ArrayList<String> = ArrayList<String>()
-    val query = FirebaseFirestore.getInstance().collection("photosNames").document(userName).collection("photos").orderBy("timeStamp").get()
+    val query = FirebaseFirestore.getInstance().collection("photosNames").document(userName).collection("photos").orderBy("timeStamp", Query.Direction.DESCENDING).get()
     query.addOnSuccessListener { documents ->
         for (document in documents) {
             fileNameList.add("images/posts/$userName"+"/"+document.get("imgName"))
         }
     }.addOnSuccessListener {
+        if(!fileNameList.isEmpty()) {
             gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+            return@addOnSuccessListener
+        }
+        gridView?.visibility = View.GONE
+        tvNoPhotos.visibility = View.VISIBLE
+        if(userName == getUserName(context))
+        {
+            btUploadPhoto?.visibility = View.VISIBLE
+            btUploadPhoto?.setOnClickListener(View.OnClickListener {
+                val intent = Intent(context, MainActivity::class.java)
+                intent.putExtra("tab",3)
+                context.startActivity(intent)
+            })
+        }
         }.addOnFailureListener {
             val a = 0
     }
@@ -252,15 +268,43 @@ fun showFeedGridView(gridView: GridView?, context:Context, activity:Activity)
 {
     val  fileNameList: ArrayList<String> = ArrayList<String>()
     val query = FirebaseFirestore.getInstance().collection("feed").document(getUserName(context)!!).collection("newPhotos")
-        .orderBy("timeStamp").get()
+        .orderBy("timeStamp", Query.Direction.DESCENDING).limit(60).get()
     query.addOnSuccessListener { documents ->
         for (document in documents) {
             fileNameList.add("images/posts/"+document.get("userName") +"/"+document.get("imgName"))
         }
+        if(fileNameList.size >3) {
+            gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+        }
+        else {
+            addSuggestedPhotos(context, fileNameList,gridView,activity)
+
+        }
     }
-    gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+
+
 
 }
+
+fun addSuggestedPhotos(
+    context: Context,
+    fileNameList: ArrayList<String>,
+    gridView: GridView?,
+    activity: Activity
+) {
+    val query = FirebaseFirestore.getInstance().collection("feed").document("global").collection("newPhotos")
+        .orderBy("timeStamp", Query.Direction.DESCENDING).limit(20).get()
+    query.addOnSuccessListener { documents ->
+        for (document in documents) {
+            if(!fileNameList.contains("images/posts/"+document.get("userName") +"/"+document.get("imgName")) && document.get("userName") != getUserName(context))
+            {
+                fileNameList.add("images/posts/"+document.get("userName") +"/"+document.get("imgName"))
+            }
+        }
+        gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
+    }
+}
+
 public fun getUserName(context: Context): String? {
     val account = GoogleSignIn.getLastSignedInAccount(context)
     return account?.email?.dropLastWhile { it != '@' }?.dropLast(1)
@@ -331,6 +375,8 @@ fun updateFriendFeed(userName: String,imgName:String) {
                 val sfDocRef = Firebase.firestore.collection("feed").document(user).collection("newPhotos")
                 sfDocRef.add(imgModel(imgName,userName))
             }
+                val sfDocRef = Firebase.firestore.collection("feed").document("global").collection("newPhotos")
+                sfDocRef.add(imgModel(imgName,userName))
 
             // Success
             null
