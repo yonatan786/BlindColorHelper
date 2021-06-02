@@ -144,12 +144,20 @@
         android:textSize="20dp"
         android:visibility="gone"
         android:text="There isn't photos"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/btnUploadPhoto"
-        android:visibility="gone"
-        android:text="Upload photo"/>
+        <Button
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/btnUploadPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button"
+            android:textColor="#232F34"
+            app:backgroundTint="@null"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:text="Upload photo" />
+
     </LinearLayout>
 </LinearLayout>

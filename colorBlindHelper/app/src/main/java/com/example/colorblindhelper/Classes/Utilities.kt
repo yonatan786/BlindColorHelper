@@ -244,20 +244,20 @@ fun showProfileGridView(userName: String, gridView: GridView?, context:Context, 
             fileNameList.add("images/posts/$userName"+"/"+document.get("imgName"))
         }
     }.addOnSuccessListener {
-        if(!fileNameList.isEmpty()) {
+        if (!fileNameList.isEmpty()) {
             gridView?.adapter = ImageRecyclerAdapter(activity, fileNameList)
             return@addOnSuccessListener
         }
         gridView?.visibility = View.GONE
-        tvNoPhotos.visibility = View.VISIBLE
-        if(userName == getUserName(context))
-        {
+        if (userName == getUserName(context)) {
             btUploadPhoto?.visibility = View.VISIBLE
             btUploadPhoto?.setOnClickListener(View.OnClickListener {
                 val intent = Intent(context, MainActivity::class.java)
-                intent.putExtra("tab",3)
+                intent.putExtra("tab", 3)
                 context.startActivity(intent)
             })
+        } else{
+            tvNoPhotos.visibility = View.VISIBLE
         }
         }.addOnFailureListener {
             val a = 0
