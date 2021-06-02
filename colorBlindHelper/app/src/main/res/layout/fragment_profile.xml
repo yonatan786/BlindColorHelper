@@ -143,7 +143,7 @@
         android:id="@+id/tvNoPhotos"
         android:textSize="20dp"
         android:visibility="gone"
-        android:text="There isn't photos"/>
+        android:text="No Posts Yet"/>
         <Button
             android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
