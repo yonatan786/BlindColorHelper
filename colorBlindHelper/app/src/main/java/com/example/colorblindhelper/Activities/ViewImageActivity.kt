@@ -18,6 +18,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import org.w3c.dom.Text
@@ -127,6 +129,22 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
            ))
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
+                if (userName != getUserName(applicationContext).toString()) {
+                    val reqNotification = hashMapOf(
+                        "content" to getUserName(applicationContext).toString() + " has commented on your post.",
+                        "title" to "New Comment",
+                        "userId" to userName
+                    )
+                    Firebase.firestore.collection("tokens").document(userName).get().addOnSuccessListener { doc ->
+                        if (doc["userToken"].toString().isNotEmpty()) {
+                            Firebase.firestore.collection("notifications")
+                                .document(getUserName(applicationContext)!!).set(reqNotification)
+                                .addOnSuccessListener {
+
+                                }
+                        }
+                    }
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(context,"Failed to upload comment", Toast.LENGTH_SHORT).show()

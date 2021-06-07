@@ -8,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.colorblindhelper.R
 import com.example.colorblindhelper.Classes.ViewPageAdapter
+import com.example.colorblindhelper.getUserName
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.itemLog_out -> {
+                val userName = getUserName(applicationContext)
+                val token = hashMapOf("userToken" to "")
+                Firebase.firestore.collection("tokens").document(userName!!).set(token)
                 mGoogleSignInClient?.signOut()
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)

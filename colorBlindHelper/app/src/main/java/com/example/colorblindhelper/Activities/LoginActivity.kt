@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 var signInButton : SignInButton? = null
@@ -102,6 +104,13 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 startActivityForResult(intent, RC_REGISTER)
             }
         };
+        val userToken = FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+            if (!TextUtils.isEmpty(token)) {
+                val token_t = hashMapOf("userToken" to token.toString())
+                Firebase.firestore.collection("tokens")
+                    .document(getUserName(applicationContext).toString()).set(token_t)
+            }
+        }
     }
 
 

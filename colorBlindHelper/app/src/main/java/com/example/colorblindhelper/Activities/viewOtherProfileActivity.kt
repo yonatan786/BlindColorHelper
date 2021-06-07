@@ -72,6 +72,11 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
             Status.WAITING,
             getUserName(applicationContext)!!, userName!!,
         )
+        val reqNotification = hashMapOf(
+            "content" to getUserName(applicationContext).toString() + " has sent you a friend request.",
+            "title" to "Friend Request",
+            "userId" to (userName!!).toString()
+        )
         db.collection("requests").document(userName!!).collection("newRequests").document(
             getUserName(applicationContext)!!).set(request)
             .addOnSuccessListener { documentReference ->
@@ -79,6 +84,17 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 btnRequestFriend?.setTextColor(Color.BLACK)
                 btnRequestFriend?.text = "Waiting..."
                 //TODO("adding notification")
+                // can check if the user owns a device
+                // by checking if the token for 'userName' is not empty in 'tokens/userName'
+                // if it is empty we don't invoke the cloud function by calling the action below
+                Firebase.firestore.collection("tokens").document(userName!!).get().addOnSuccessListener { doc ->
+                    if (doc["userToken"].toString().isNotEmpty()) {
+                        db.collection("notifications").document(getUserName(applicationContext)!!)
+                            .set(reqNotification).addOnSuccessListener {
+
+                        }
+                    }
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(applicationContext,"Failed to upload the details",Toast.LENGTH_SHORT).show()
