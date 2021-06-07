@@ -20,7 +20,6 @@ import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import com.example.colorblindhelper.Activities.MainActivity
 import com.example.colorblindhelper.Activities.ViewImage
 import com.example.colorblindhelper.Classes.ImageRecyclerAdapter

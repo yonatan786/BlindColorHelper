@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.colorblindhelper.Classes.commentModel
+import com.example.colorblindhelper.Classes.notificationModel
 import com.example.colorblindhelper.R
 import com.example.colorblindhelper.downloadImgViewProfile
 import com.example.colorblindhelper.getUserName
@@ -130,11 +131,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
                 if (userName != getUserName(applicationContext).toString()) {
-                    val reqNotification = hashMapOf(
-                        "content" to getUserName(applicationContext).toString() + " has commented on your post.",
-                        "title" to "New Comment",
-                        "userId" to userName
-                    )
+                    val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has commented on your post.","New Comment",userName)
                     Firebase.firestore.collection("tokens").document(userName).get().addOnSuccessListener { doc ->
                         if (doc["userToken"].toString().isNotEmpty()) {
                             Firebase.firestore.collection("notifications")

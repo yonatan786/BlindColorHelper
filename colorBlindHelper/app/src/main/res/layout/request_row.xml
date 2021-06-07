@@ -42,6 +42,11 @@
         android:textSize="15sp"
         android:textColor="#344955"
         android:id="@+id/tvUserName"/>
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right">
     <Button
         android:layout_marginLeft="20dp"
         android:layout_height="wrap_content"
@@ -62,4 +67,5 @@
         android:textStyle="bold"
         android:text="Reject"
         android:id="@+id/btnReject"/>
+        </LinearLayout>
 </LinearLayout>

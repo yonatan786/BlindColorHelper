@@ -32,7 +32,7 @@ class RequestActivity : AppCompatActivity() {
 
     private fun firebaseRequestList() {
         val query = FirebaseFirestore.getInstance().collection("requests/"+ getUserName(applicationContext) +"/newRequests")
-            .whereNotEqualTo("status", "FRIENDS")
+            .whereEqualTo("status", "WAITING")
 
         val options = FirestoreRecyclerOptions.Builder<RequestFriendship>()
             .setQuery(query, RequestFriendship::class.java)

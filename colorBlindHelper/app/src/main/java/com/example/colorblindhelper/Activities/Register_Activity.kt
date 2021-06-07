@@ -37,6 +37,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val i = intent.getIntExtra("requestCode",-1)
         requestIntentFlag = requestType[i]
         getUserDetails()
+        //switch.set on change if true "updateNotification"(true) else "updateNotification"(true)
     }
 
     private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?,fullNameText:String?) {

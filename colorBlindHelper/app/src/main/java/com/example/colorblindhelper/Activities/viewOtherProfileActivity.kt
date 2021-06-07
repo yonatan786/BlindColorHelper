@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import com.example.colorblindhelper.*
+import com.example.colorblindhelper.Classes.notificationModel
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -72,11 +73,8 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
             Status.WAITING,
             getUserName(applicationContext)!!, userName!!,
         )
-        val reqNotification = hashMapOf(
-            "content" to getUserName(applicationContext).toString() + " has sent you a friend request.",
-            "title" to "Friend Request",
-            "userId" to (userName!!).toString()
-        )
+        val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has sent you a friend request.","Friend Request", userName!!)
+
         db.collection("requests").document(userName!!).collection("newRequests").document(
             getUserName(applicationContext)!!).set(request)
             .addOnSuccessListener { documentReference ->
