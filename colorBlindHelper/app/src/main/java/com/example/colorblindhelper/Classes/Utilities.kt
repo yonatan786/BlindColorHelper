@@ -50,6 +50,11 @@ fun updateBlindType(blindTypeText:String,activity: Activity) {
     editor.putString("blindType", blindTypeText);
     editor.apply()
 }
+fun updateNotificationSwitch(switchStatus:Boolean,activity: Activity) {
+    val editor = activity.getSharedPreferences("notificationSwitch", MODE_PRIVATE).edit();
+    editor.putBoolean("notifySwitch", switchStatus);
+    editor.apply()
+}
 fun uploadDataToFirebase(context: Context, isGlasses:Boolean, gender: Gender, birthDate: String,fullName:String) {
 
     val db = Firebase.firestore

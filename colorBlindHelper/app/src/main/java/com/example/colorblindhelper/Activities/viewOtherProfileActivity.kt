@@ -73,7 +73,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
             Status.WAITING,
             getUserName(applicationContext)!!, userName!!,
         )
-        val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has sent you a friend request.","Friend Request", userName!!)
+        val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has sent you a friend request.","Friend Request", userName!!,"")
 
         db.collection("requests").document(userName!!).collection("newRequests").document(
             getUserName(applicationContext)!!).set(request)
@@ -85,13 +85,19 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
                 // can check if the user owns a device
                 // by checking if the token for 'userName' is not empty in 'tokens/userName'
                 // if it is empty we don't invoke the cloud function by calling the action below
-                Firebase.firestore.collection("tokens").document(userName!!).get().addOnSuccessListener { doc ->
-                    if (doc["userToken"].toString().isNotEmpty()) {
-                        db.collection("notifications").document(getUserName(applicationContext)!!)
-                            .set(reqNotification).addOnSuccessListener {
+                val sp = applicationContext.getSharedPreferences("notificationSwitch", MODE_PRIVATE)
+                val switchState = sp.getBoolean("notifySwitch",true)
+                if (switchState) {
+                    Firebase.firestore.collection("tokens").document(userName!!).get()
+                        .addOnSuccessListener { doc ->
+                            if (doc["userToken"].toString().isNotEmpty()) {
+                                db.collection("notifications")
+                                    .document(getUserName(applicationContext)!!)
+                                    .set(reqNotification).addOnSuccessListener {
 
+                                    }
+                            }
                         }
-                    }
                 }
             }
             .addOnFailureListener { e ->

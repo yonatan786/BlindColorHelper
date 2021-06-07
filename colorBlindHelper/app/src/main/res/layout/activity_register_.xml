@@ -67,6 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Yes"
+            android:buttonTint="#F9AA33"
             android:textColor="#344955"
             android:checked="false"
             android:textSize="20dp" />
@@ -77,6 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#344955"
+            android:buttonTint="#F9AA33"
             android:text="No"
             android:checked="false"
 
@@ -105,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
+            android:buttonTint="#F9AA33"
             android:checked="false"
             android:textColor="#344955"
             android:textSize="20dp" />
@@ -116,6 +119,7 @@
             android:layout_height="wrap_content"
             android:text="Female"
             android:checked="false"
+            android:buttonTint="#F9AA33"
             android:textColor="#344955"
             android:textSize="20dp" />
     </RadioGroup>
@@ -145,11 +149,21 @@
             />
     </LinearLayout>
 
-        <Switch
-            android:id="@+id/switch1"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/notifySwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Switch" />
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            android:text="Allow Notification"
+            android:textColor="#232F34"
+            android:checked = "true"
+            android:theme="@style/SCBSwitch"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            />
 
     </LinearLayout>
     <LinearLayout

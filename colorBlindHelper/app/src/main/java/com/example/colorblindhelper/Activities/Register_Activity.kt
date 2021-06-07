@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.example.colorblindhelper.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +25,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
     private var radioIsGlasses: RadioGroup? = null
     private var radioGender: RadioGroup? = null
     private var datePicker: DatePicker? = null
+    private var switchNotify: SwitchCompat? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_)
@@ -37,7 +39,7 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val i = intent.getIntExtra("requestCode",-1)
         requestIntentFlag = requestType[i]
         getUserDetails()
-        //switch.set on change if true "updateNotification"(true) else "updateNotification"(true)
+        switchNotify = findViewById(R.id.notifySwitch)
     }
 
     private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?,fullNameText:String?) {
@@ -97,6 +99,11 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish()
             }
+        if (switchNotify?.isChecked == true) {
+            updateNotificationSwitch(true, this)
+        } else {
+            updateNotificationSwitch(false, this)
+        }
         val intent = Intent(this, TestActivity::class.java)
         startActivityForResult(intent, RC_TEST)
 

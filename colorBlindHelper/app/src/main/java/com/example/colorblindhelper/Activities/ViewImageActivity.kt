@@ -130,16 +130,27 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
            ))
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
-                if (userName != getUserName(applicationContext).toString()) {
-                    val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has commented on your post.","New Comment",userName)
-                    Firebase.firestore.collection("tokens").document(userName).get().addOnSuccessListener { doc ->
-                        if (doc["userToken"].toString().isNotEmpty()) {
-                            Firebase.firestore.collection("notifications")
-                                .document(getUserName(applicationContext)!!).set(reqNotification)
-                                .addOnSuccessListener {
+                val sp = applicationContext.getSharedPreferences("notificationSwitch", MODE_PRIVATE)
+                val switchState = sp.getBoolean("notifySwitch",true)
+                if (switchState) {
+                    if (userName != getUserName(applicationContext).toString()) {
+                        val reqNotification = notificationModel(
+                            getUserName(applicationContext).toString() + " has commented on your post.",
+                            "New Comment",
+                            userName,
+                            fileName
+                        )
+                        Firebase.firestore.collection("tokens").document(userName).get()
+                            .addOnSuccessListener { doc ->
+                                if (doc["userToken"].toString().isNotEmpty()) {
+                                    Firebase.firestore.collection("notifications")
+                                        .document(getUserName(applicationContext)!!)
+                                        .set(reqNotification)
+                                        .addOnSuccessListener {
 
+                                        }
                                 }
-                        }
+                            }
                     }
                 }
             }
