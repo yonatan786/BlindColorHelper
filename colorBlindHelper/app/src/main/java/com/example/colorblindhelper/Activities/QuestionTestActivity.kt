@@ -287,14 +287,20 @@ class QuestionTestActivity : AppCompatActivity() {
                     }
 
                     var classification = "Not classified"
-                    if (correct_score[0] / 12.0 >= 0.8 && answers[12] == normal[12] && answers[13] == normal[13])
+                    var classificationText = "UNCLASSIFIED"
+                    if (correct_score[0] / 12.0 >= 0.8 && answers[12] == normal[12] && answers[13] == normal[13]){
                         classification = "Normal"
-
+                        classificationText = "NORMAL"
+                    }
                     if (correct_score[1] / 12.0 >= 0.8) {
-                        if (answers[12] == 2 && answers[13] == 6)
+                        if (answers[12] == 2 && answers[13] == 6) {
                             classification = "Red-Blind/Protanopia"
-                        if (answers[12] == 4 && answers[13] == 2)
+                            classificationText = "RED_BLIND"
+                        }
+                        if (answers[12] == 4 && answers[13] == 2) {
                             classification = "Green-Blind/Deuteranopia"
+                            classificationText = "GREEN_BLIND"
+                        }
                     }
 
                     // checks if vision is Monochromacy (black-white blindness)
@@ -305,10 +311,10 @@ class QuestionTestActivity : AppCompatActivity() {
                     }
                     if (check == 0)
                         classification = "Monochromacy"
-
+                        classificationText = "BLACK_WHITE_BLIND"
                     // show result dialog:
                     updateClassificationOnFirebase(classification)
-                    updateBlindType(classification,this)
+                    updateBlindType(classificationText,this)
                     showDialog(classification)
 
 
