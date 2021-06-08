@@ -73,7 +73,7 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
             Status.WAITING,
             getUserName(applicationContext)!!, userName!!,
         )
-        val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has sent you a friend request.","Friend Request", userName!!,"")
+        val reqNotification = notificationModel(getUserName(applicationContext).toString() + " has sent you a friend request.","Friend Request", userName!!,"", getUserName(applicationContext).toString())
 
         db.collection("requests").document(userName!!).collection("newRequests").document(
             getUserName(applicationContext)!!).set(request)
