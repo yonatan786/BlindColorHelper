@@ -7,11 +7,11 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 
 @IgnoreExtraProperties
-class notificationModel(val content:String,val title:String,val userId: String, val imageFile: String, val myUName: String, @ServerTimestamp
+class notificationModel(val content:String,val title:String,val userId: String, val imageFile: String, @ServerTimestamp
 private val timeStamp: Timestamp? = null){
 
 
-    constructor() : this("", "","", "", "",null)
+    constructor() : this("", "","", "",null)
     public fun getTimeStamp():Timestamp?{
         return timeStamp
     }

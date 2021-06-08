@@ -138,8 +138,7 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
                             getUserName(applicationContext).toString() + " has commented on your post.",
                             "New Comment",
                             userName,
-                            fileName,
-                            getUserName(applicationContext).toString()
+                            fileName
                         )
                         Firebase.firestore.collection("tokens").document(userName).get()
                             .addOnSuccessListener { doc ->

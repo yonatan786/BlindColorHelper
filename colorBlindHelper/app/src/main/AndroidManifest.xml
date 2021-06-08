@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ColorBlindHelper">
-        <activity android:name=".Activities.RequestActivity" />
+        <activity android:name=".Activities.RequestActivity"></activity>
         <activity android:name=".Activities.QuestionTestActivity" />
         <activity android:name=".Activities.viewOtherProfileActivity">
             <intent-filter>
