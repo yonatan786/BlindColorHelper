@@ -10,6 +10,8 @@ import android.text.TextUtils
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.example.colorblindhelper.Activities.MainActivity
+import com.example.colorblindhelper.Activities.ViewImage
+import com.example.colorblindhelper.Activities.viewOtherProfileActivity
 import com.example.colorblindhelper.R
 import com.example.colorblindhelper.getUserName
 import com.google.firebase.firestore.ktx.firestore
@@ -36,10 +38,27 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
         // attributes. Since here we do not have any data
         // payload, This section is commented out. It is
         // here only for reference purposes.
-//        if(remoteMessage.getData().isNotEmpty()){
+
 //            showNotification(remoteMessage.getData().get("title"),
 //                          remoteMessage.getData().get("message"));
-//        }
+        if(remoteMessage.data.isNotEmpty()){
+            showNotification(remoteMessage.data["title"], remoteMessage.data["body"])
+//            val uname = remoteMessage.data["username"]
+//            val fname = remoteMessage.data["fileName"]
+//            val unameProfile = remoteMessage.data["userNameProfile"]
+//            val title = remoteMessage.data["title"]
+//
+//            if (title == "Friend Request") {
+//                val intent = Intent(applicationContext, viewOtherProfileActivity::class.java)
+//                intent.putExtra("userNameProfile", unameProfile)
+//                applicationContext.startActivity(intent)
+//            } else if (title == "New Comment") {
+//                val intent = Intent(applicationContext, ViewImage::class.java)
+//                intent.putExtra("username", uname)
+//                intent.putExtra("fileName", fname)
+//                applicationContext.startActivity(intent)
+//            }
+        }
 
         // Second case when notification payload is
         // received.
