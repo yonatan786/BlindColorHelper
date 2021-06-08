@@ -38,9 +38,8 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
         // attributes. Since here we do not have any data
         // payload, This section is commented out. It is
         // here only for reference purposes.
-        if(remoteMessage.getData().isNotEmpty()){
-//            showNotification(remoteMessage.getData().get("title"),
-//                          remoteMessage.getData().get("message"));
+        if(remoteMessage.data.isNotEmpty()){
+            showNotification(remoteMessage.data["title"], remoteMessage.data["message"])
             val uname = remoteMessage.data["username"]
             val fname = remoteMessage.data["fileName"]
             val unameProfile = remoteMessage.data["userNameProfile"]
