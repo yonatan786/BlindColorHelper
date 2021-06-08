@@ -16,14 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ColorBlindHelper">
-        <activity android:name=".Activities.RequestActivity">
+        <activity android:name=".Activities.RequestActivity"></activity>
+        <activity android:name=".Activities.QuestionTestActivity" />
+        <activity android:name=".Activities.viewOtherProfileActivity">
             <intent-filter>
                 <action android:name="OPEN_FRIEND_REQUESTS" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.QuestionTestActivity" />
-        <activity android:name=".Activities.viewOtherProfileActivity" />
         <activity android:name=".settingsActivity" />
         <activity android:name=".Activities.Register_Activity" />
         <activity android:name=".Activities.ViewImage">
