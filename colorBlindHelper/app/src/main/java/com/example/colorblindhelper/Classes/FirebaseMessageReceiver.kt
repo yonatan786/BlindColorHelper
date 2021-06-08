@@ -118,6 +118,7 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
         }
         intent.putExtra("username", username)
         intent.putExtra("fileName", fileName)
+        intent.putExtra("notification", true)
         intent.putExtra("userNameProfile", myUserName)
         // Assign channel ID
         val channel_id = "notification_channel"

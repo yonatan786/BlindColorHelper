@@ -3,12 +3,12 @@ package com.example.colorblindhelper.Activities
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.colorblindhelper.*
 import com.example.colorblindhelper.Classes.notificationModel
 import com.google.firebase.firestore.ktx.firestore
@@ -52,6 +52,11 @@ class viewOtherProfileActivity : AppCompatActivity(), AdapterView.OnItemClickLis
         when (item.itemId) {
             R.id.itemGoBack -> {
                 val returnIntent = Intent()
+                val isNotification = intent.getBooleanExtra("notification",false)
+                if(isNotification ) {
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    return false
+                }
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish()
             }

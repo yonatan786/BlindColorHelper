@@ -73,6 +73,11 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
         when (item.itemId) {
             R.id.itemGoBack -> {
                 val returnIntent = Intent()
+                val isNotification = intent.getBooleanExtra("notification",false)
+                if(isNotification ) {
+                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    return false
+                }
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish()
             }
