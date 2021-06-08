@@ -39,13 +39,14 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val i = intent.getIntExtra("requestCode",-1)
         requestIntentFlag = requestType[i]
         getUserDetails()
-        switchNotify = findViewById(R.id.notifySwitch)
+        switchNotify = findViewById<SwitchCompat>(R.id.notifySwitch)
     }
 
-    private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?,fullNameText:String?) {
+    private fun updateAllFields(date: String?, gender: Gender?, isGlasses: Boolean?,fullNameText:String?, sStatus: Boolean?) {
         radioGender?.check( if(gender == Gender.MALE){R.id.radioMale}else{R.id.radioFemale} )
         radioIsGlasses?.check(if(isGlasses==true){R.id.radioGlassesYes}else{R.id.radioGlassesYes})
         etFullName?.setText(fullNameText)
+        switchNotify?.isChecked = sStatus == true
     }
 
     private fun getUserDetails() {
@@ -55,16 +56,16 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
             .addOnSuccessListener { documentSnapshot ->
                 val user = documentSnapshot.toObject(UserModel::class.java)
                 if(user != null)
-                    updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses(),user?.getFullName())
+                    updateAllFields(user?.getBirthDate(),user?.getGender(),user?.getisGlasses(),user?.getFullName(), user?.getSwitchStatus())
                 else{
                     val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
-                    updateAllFields(null,null,null,account?.givenName +" "+ account?.familyName
-                    )
+                    updateAllFields(null,null,null,account?.givenName +" "+ account?.familyName,
+                    null)
                 }
             }.addOnFailureListener{
                 val account = GoogleSignIn.getLastSignedInAccount(applicationContext)
-                updateAllFields(null,null,null,account?.givenName + account?.familyName
-                )
+                updateAllFields(null,null,null,account?.givenName + account?.familyName,
+                null)
             }
     }
 
@@ -92,8 +93,9 @@ class Register_Activity : AppCompatActivity(), View.OnClickListener {
         val gender = getGender(radioGender!!.checkedRadioButtonId, R.id.radioMale, R.id.radioFemale)
         if(isGlasses == null || gender == null)
             return
+        val isSwitched = switchNotify?.isChecked == true
         val birthDate = getDate(datePicker!!).toString()
-            uploadDataToFirebase(applicationContext,isGlasses,gender,birthDate,fullNameText)
+            uploadDataToFirebase(applicationContext,isGlasses,gender,birthDate,fullNameText, isSwitched)
             if(requestIntentFlag!! == RequestType.UPDATE) {
                 val returnIntent = Intent()
                 setResult(Activity.RESULT_OK, returnIntent);

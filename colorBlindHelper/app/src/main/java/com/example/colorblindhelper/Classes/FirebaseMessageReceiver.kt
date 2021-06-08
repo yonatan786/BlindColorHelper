@@ -41,8 +41,8 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
 
 //            showNotification(remoteMessage.getData().get("title"),
 //                          remoteMessage.getData().get("message"));
-        if(remoteMessage.data.isNotEmpty()){
-            showNotification(remoteMessage.data["title"], remoteMessage.data["body"])
+//        if(remoteMessage.data.isNotEmpty()){
+//            showNotification(remoteMessage.data["title"], remoteMessage.data["body"])
 //            val uname = remoteMessage.data["username"]
 //            val fname = remoteMessage.data["fileName"]
 //            val unameProfile = remoteMessage.data["userNameProfile"]
@@ -58,17 +58,26 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
 //                intent.putExtra("fileName", fname)
 //                applicationContext.startActivity(intent)
 //            }
-        }
+//        }
 
         // Second case when notification payload is
         // received.
-        if (remoteMessage.notification != null) {
-            // Since the notification is received directly from
-            // FCM, the title and the body can be fetched
-            // directly as below.
+//        if (remoteMessage.notification != null) {
+//            // Since the notification is received directly from
+//            // FCM, the title and the body can be fetched
+//            // directly as below.
+//            showNotification(
+//                remoteMessage.notification!!.title,
+//                remoteMessage.notification!!.body
+//            )
+//        }
+        if (remoteMessage.data.isNotEmpty()) {
             showNotification(
-                remoteMessage.notification!!.title,
-                remoteMessage.notification!!.body
+                remoteMessage.data["title"],
+                remoteMessage.data["body"],
+                remoteMessage.data["username"],
+                remoteMessage.data["fileName"],
+                remoteMessage.data["userNameProfile"]
             )
         }
     }
@@ -95,10 +104,21 @@ class FirebaseMessageReceiver : FirebaseMessagingService() {
     // Method to display the notifications
     fun showNotification(
         title: String?,
-        message: String?
+        message: String?,
+        username: String?,
+        fileName: String?,
+        myUserName: String?
     ) {
         // Pass the intent to switch to the MainActivity
-        val intent = Intent(this, MainActivity::class.java)
+
+        val intent = if (title == "Friend Request") {
+            Intent(this, viewOtherProfileActivity::class.java)
+        } else {
+            Intent(this, ViewImage::class.java)
+        }
+        intent.putExtra("username", username)
+        intent.putExtra("fileName", fileName)
+        intent.putExtra("userNameProfile", myUserName)
         // Assign channel ID
         val channel_id = "notification_channel"
         // Here FLAG_ACTIVITY_CLEAR_TOP flag is set to clear

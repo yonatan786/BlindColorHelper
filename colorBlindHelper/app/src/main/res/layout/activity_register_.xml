@@ -25,7 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:orientation="horizontal">
@@ -48,7 +48,7 @@
         </LinearLayout>
     <RadioGroup
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -87,7 +87,7 @@
 
 
         <RadioGroup
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -123,8 +123,23 @@
             android:textColor="#344955"
             android:textSize="20dp" />
     </RadioGroup>
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/notifySwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal"
+            android:text="Allow Notification"
+            android:textColor="#232F34"
+            android:checked = "true"
+            android:theme="@style/SCBSwitch"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            />
     <LinearLayout
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -149,43 +164,22 @@
             />
     </LinearLayout>
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/notifySwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:orientation="horizontal"
-            android:text="Allow Notification"
-            android:textColor="#232F34"
-            android:checked = "true"
-            android:theme="@style/SCBSwitch"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            />
-
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:gravity="bottom|right"
 
-        >
 
         <Button
             android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp"
-            android:layout_marginEnd="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/rounded_button"
             android:textColor="#232F34"
             app:backgroundTint="@null"
             android:textStyle="bold"
+            android:layout_gravity="bottom|right"
             android:text="NEXT" />
 
-    </LinearLayout>
+
 
 </LinearLayout>

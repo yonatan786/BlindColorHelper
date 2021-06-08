@@ -130,30 +130,33 @@ class ViewImage : AppCompatActivity(), View.OnClickListener {
            ))
             .addOnSuccessListener { documentReference ->
                 firebaseUpdate()
-                val sp = applicationContext.getSharedPreferences("notificationSwitch", MODE_PRIVATE)
-                val switchState = sp.getBoolean("notifySwitch",true)
-                if (switchState) {
-                    if (userName != getUserName(applicationContext).toString()) {
-                        val reqNotification = notificationModel(
-                            getUserName(applicationContext).toString() + " has commented on your post.",
-                            "New Comment",
-                            userName,
-                            fileName,
-                            getUserName(applicationContext).toString()
-                        )
-                        Firebase.firestore.collection("tokens").document(userName).get()
-                            .addOnSuccessListener { doc ->
-                                if (doc["userToken"].toString().isNotEmpty()) {
-                                    Firebase.firestore.collection("notifications")
-                                        .document(getUserName(applicationContext)!!)
-                                        .set(reqNotification)
-                                        .addOnSuccessListener {
+//                val sp = applicationContext.getSharedPreferences("notificationSwitch", MODE_PRIVATE)
+//                val switchState = sp.getBoolean("notifySwitch", true)
+                Firebase.firestore.collection("users").document(userName).get()
+                    .addOnSuccessListener { docRef ->
+                        if (docRef.getBoolean("switchStatus") == true) {
+                            if (userName != getUserName(applicationContext).toString()) {
+                                val reqNotification = notificationModel(
+                                    getUserName(applicationContext).toString() + " has commented on your post.",
+                                    "New Comment",
+                                    userName,
+                                    fileName,
+                                    getUserName(applicationContext).toString()
+                                )
+                                Firebase.firestore.collection("tokens").document(userName).get()
+                                    .addOnSuccessListener { doc ->
+                                        if (doc["userToken"].toString().isNotEmpty()) {
+                                            Firebase.firestore.collection("notifications")
+                                                .document(getUserName(applicationContext)!!)
+                                                .set(reqNotification)
+                                                .addOnSuccessListener {
 
+                                                }
                                         }
-                                }
+                                    }
                             }
+                        }
                     }
-                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(context,"Failed to upload comment", Toast.LENGTH_SHORT).show()

@@ -3,7 +3,7 @@ package com.example.colorblindhelper
 import com.google.firebase.database.Exclude
 import java.util.*
 enum class ClassifyBlindness{NORMAL,RED_BLIND,GREEN_BLIND,UNCLASSIFIED,BLACK_WHITE_BLIND}
-class UserModel(private val userName:String, private val isGlasses: Boolean, private val gender: Gender?, private val birthDate: String, private val fullName:String, private var typeBlind:ClassifyBlindness = ClassifyBlindness.UNCLASSIFIED,
+class UserModel(private val userName:String, private val isGlasses: Boolean, private val gender: Gender?, private val birthDate: String, private val fullName:String, private val switchStatus: Boolean = true, private var typeBlind:ClassifyBlindness = ClassifyBlindness.UNCLASSIFIED,
 ){
 
 
@@ -23,6 +23,9 @@ class UserModel(private val userName:String, private val isGlasses: Boolean, pri
     }
     public fun getBirthDate(): String {
         return birthDate
+    }
+    public fun getSwitchStatus(): Boolean {
+        return switchStatus
     }
     public fun getBlindType(): ClassifyBlindness {
         return typeBlind
