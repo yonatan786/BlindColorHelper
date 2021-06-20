@@ -68,10 +68,10 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
     }
 
     fun saveImageToStorage() {
-        saveImgInStorage(bitmap!!,activity!!)
+        saveImgInStorage(rotate(bitmap!!, 90F)!!,activity!!)
     }
     fun uploadImageToFirebase(type: uploadType) {
-        uploadPictureToFirebaseStorage(activity!!,bitmap,null,type)
+        uploadPictureToFirebaseStorage(activity!!,rotate(bitmap!!, 90F)!!,null,type)
     }
     inner class CustomDetector : Detector<Point>() {
 
@@ -92,7 +92,7 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
 
             val jpegArray = baos.toByteArray()
              bitmap = BitmapFactory.decodeByteArray(jpegArray, 0, jpegArray.size)
-            activity?.runOnUiThread(Runnable{ getEditedImg(bitmap!!,w,h, cameraPreview!!, editCameraPreview!!,
+            activity?.runOnUiThread(Runnable{ getEditedImg(rotate(bitmap!!, 90F)!!,w,h, cameraPreview!!, editCameraPreview!!,
                 activity!!
             ) })
 
@@ -101,6 +101,13 @@ class colorDetector(activity: Activity, cameraPreview: ImageView?, editCameraPre
         }
 
 
+    }
+
+    fun rotate(bitmap: Bitmap, degree: Float): Bitmap? {
+        val matrix = Matrix()
+        matrix.postRotate(degree)
+        val resized_bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.width, bitmap.width, false)
+        return Bitmap.createBitmap(resized_bitmap, 0, 0, resized_bitmap.width, resized_bitmap.height, matrix, true)
     }
 }
 
